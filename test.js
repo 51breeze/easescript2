@@ -1,0 +1,601 @@
+const acorn = require("acorn");
+
+const  lineBreak = /\r\n?|\n|\u2028|\u2029/;
+
+ const
+ SCOPE_TOP = 1,
+ SCOPE_FUNCTION = 2,
+ SCOPE_VAR = SCOPE_TOP | SCOPE_FUNCTION,
+ SCOPE_ASYNC = 4,
+ SCOPE_GENERATOR = 8,
+ SCOPE_ARROW = 16,
+ SCOPE_SIMPLE_CATCH = 32,
+ SCOPE_SUPER = 64,
+ SCOPE_DIRECT_SUPER = 128;
+
+ const
+ BIND_NONE = 0, // Not a binding
+ BIND_VAR = 1, // Var-style binding
+ BIND_LEXICAL = 2, // Let- or const-style binding
+ BIND_FUNCTION = 3, // Function declaration
+ BIND_SIMPLE_CATCH = 4, // Simple (identifier pattern) catch binding
+ BIND_OUTSIDE = 5; // Special case for function names as bound inside the function
+
+const Parser = acorn.Parser
+const TokenType = Parser.acorn.TokenType;
+const tokTypes = Parser.acorn.tokTypes;
+const keywordTypes = Parser.acorn.keywordTypes;
+
+keywordTypes["is"] = new TokenType("is", {beforeExpr: true, binop: 7});
+tokTypes._is = keywordTypes["is"];
+
+keywordTypes["package"] = new TokenType("package",{startsExpr: true});
+tokTypes._package = keywordTypes["package"];
+
+keywordTypes["implements"] = new TokenType("implements",{startsExpr: true});
+tokTypes._implements = keywordTypes["implements"];
+
+keywordTypes["private"] = new TokenType("private",{startsExpr: true});
+tokTypes._private = keywordTypes["private"];
+
+keywordTypes["protected"] = new TokenType("protected",{startsExpr: true});
+tokTypes._protected = keywordTypes["protected"];
+
+keywordTypes["public"] = new TokenType("public",{startsExpr: true});
+tokTypes._public = keywordTypes["public"];
+
+tokTypes._annotation = new TokenType("@",{startsExpr: true});
+tokTypes._shortTernary = new TokenType("?:",{startsExpr: true,binop:1});
+
+const EaseScript = class extends Parser {
+
+    constructor(options, input, startPos)
+    {
+        options = options || {};
+        options.locations = true;
+        super(options, input, startPos);
+        this.keywords =  new RegExp( this.keywords.source.replace(")$","|is|package|implements|public|protected|private)$") );
+    }
+
+    parseStatement(context, topLevel, exports)
+    {
+        switch ( this.type )
+        {
+            case tokTypes._package : 
+                if( !topLevel )
+                {
+                    this.unexpected();
+                }
+                return this.parsePackage( this.startNode(), true );
+            break;
+            case tokTypes._import:
+                if( !topLevel || !this.hasPackage )
+                {
+                    this.unexpected();
+                }
+                return this.parseImport( this.startNode() );
+            default:   
+        }
+        return super.parseStatement(context, topLevel, exports);
+
+    }
+
+    readToken( code )
+    {
+        if( code===63 && this.input.charCodeAt(this.pos+1)===58)
+        {
+            this.pos+=2; 
+            return this.finishToken(tokTypes._shortTernary);
+        }
+
+       if( code == 64 )
+       {
+          ++this.pos; 
+          return this.finishToken(tokTypes._annotation);
+       } 
+       return super.readToken(code);
+    }
+
+    parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn) 
+    {
+        var prec = this.type.binop;
+        if (prec != null && (!noIn || this.type !== types._in)) 
+        {
+            if (prec > minPrec && this.type === tokTypes._shortTernary ) 
+            {
+                var op = this.value;
+                this.next();
+                var startPos = this.start, startLoc = this.startLoc;
+                var right = this.parseExprOp( this.parseMaybeUnary(null, false), startPos, startLoc, prec, noIn);
+                var node = this.buildBinary(leftStartPos, leftStartLoc, left, right, op, true);
+                return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec, noIn)
+            }
+        }
+        return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn);
+    }
+
+    parseClassSuper(node)
+    {
+        node.superClass = this.eat(tokTypes._extends) ? this.parseChainIdentifier() : null;
+        node.implements = null;
+        if( this.eat(tokTypes._implements) )
+        {
+            node.implements = [];
+            do{ 
+                node.implements.push( this.parseChainIdentifier() );
+            }while( this.eat(tokTypes.comma) );
+        }
+    };
+
+    parseClassMethod(method, isGenerator, isAsync, allowsDirectSuper)
+    {
+        if( this.type !== tokTypes.parenL )
+        {
+            method.kind = "property";
+            const node = this.startNode();
+            node.value= this.value;
+
+            if( this.eat( tokTypes.colon ) )
+            {
+                method.acceptType = this.parseTypeStatement();
+            }
+
+            if( this.eat(tokTypes.eq) )
+            {
+                method.init = this.parseExpression();
+                method.operator = node;
+                this.finishNode(node, "Operator");
+            } 
+
+            this.semicolon();
+            return this.finishNode(method, "PropertyDefinition");
+        }
+        return super.parseClassMethod(method, isGenerator, isAsync, allowsDirectSuper);
+    }
+
+    parseChainIdentifier()
+    {
+        const startPos = this.start, startLoc = this.startLoc;
+        const type = this.type;
+        var base = super.parseIdent();
+        this.checkLVal(base, BIND_NONE);
+        while ( this.eat( tokTypes.dot ) ) 
+        {
+            const node = this.startNodeAt(startPos, startLoc);
+            node.object = base;
+            node.property = this.parseIdent( this.options.allowReserved !== "never" );
+            base = this.finishNode(node, "MemberExpression");
+        }
+        return base;
+    }
+
+    parseTypeStatement()
+    {
+        const node = this.startNode();
+        let  typeName = "TypeDefinition";
+       
+        if( (this.type === tokTypes.name || this.type  === tokTypes._void) && this.type !== tokTypes.eof )
+        {
+            const lastTokEnd = this.lastTokEnd;
+            const lastTokEndLoc = this.lastTokEndLoc;
+            const type   = this.parseChainIdentifier();
+            const unions = [];
+            const operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
+
+            while( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+            {
+                unions.push( this.parseChainIdentifier() );
+            }
+
+            if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
+            {
+                const genericType = this.startNode();
+                genericType.body = [];
+                this.next();
+                while( !( this.type === tokTypes.relational && this.value.charCodeAt(0) === 62 && this.value.length===1 ) )
+                {
+                    genericType.body.push( this.parseTypeStatement() );
+                    if( !this.eat(tokTypes.comma) )
+                    {
+                       break;
+                    }
+                }
+                
+                this.next();
+                if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+                {
+                    genericType.body.push( this.parseTypeStatement() );
+                }
+                node.value = this.finishNode(genericType, "GenericTypeDefinition" );
+
+            }else if( this.type === tokTypes.bracketL )
+            {
+                const genericType = this.startNode();
+                genericType.body = [ type ];
+
+                this.next();
+                if( this.type !== tokTypes.bracketR )
+                {
+                    this.unexpected(); 
+                }
+            
+                this.next();
+                if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+                {
+                    genericType.body.push( this.parseTypeStatement() );
+                } 
+                node.value = this.finishNode(genericType, "GenericTypeDefinition" );
+                node.type = this.finishNodeAt(this.startNode(), "Identifier",  lastTokEnd, lastTokEndLoc)
+                node.type.name = "Array";
+                node.isArrayElement = true;
+            }
+
+            if( operator )
+            {
+                node.operator = operator;
+                node.body = unions;
+
+            }else
+            {
+               node.type = type;
+            }
+
+        }else
+        {
+            this.unexpected();
+        }
+
+        return this.finishNode(node, typeName );
+    }
+
+    parseBlock(createNewLexicalScope, node)
+    {
+        if ( createNewLexicalScope === void 0 )
+        {
+            createNewLexicalScope = true;
+        } 
+
+        if ( node === void 0 ) 
+        {
+            node = this.startNode();
+        }
+
+        const scope = this.currentScope();
+        switch( scope.flags & SCOPE_FUNCTION )
+        {
+            case SCOPE_ARROW :
+            case SCOPE_FUNCTION :
+            case SCOPE_ASYNC :
+            case SCOPE_GENERATOR :
+                if( this.eat( tokTypes.colon ) )
+                {
+                   node.acceptType = this.parseTypeStatement();
+                }
+                break;
+        }
+        return super.parseBlock(createNewLexicalScope, node);
+    }
+
+    parseIdent(liberal, isBinding)
+    {
+       const node = super.parseIdent(liberal, isBinding);
+       if( !liberal && this.eat( tokTypes.colon ) )
+       {
+           node.acceptType =  this.parseTypeStatement();
+       }
+       return node;
+    }
+
+    parseAnnotation()
+    {
+        this.next();
+        const node = this.startNode();
+        node.name = this.value;
+        this.next();
+        if( this.eat( tokTypes.parenL )  )
+        {
+            node.body = [];
+            while( this.type !== tokTypes.parenR )
+            {
+                const elem = this.startNode();
+                elem.name = this.value;
+
+                this.next();
+                if( this.eat(tokTypes.eq) )
+                {
+                    elem.value = this.parseMaybeAssign();
+                }
+                node.body.push( elem )
+                this.finishNode(elem, "AssignmentExpression");
+
+                if( !this.eat(tokTypes.comma) )
+                {
+                    break;
+                }
+            }
+            this.expect( tokTypes.parenR );
+        }
+        return this.finishNode(node, "AnnotationDeclaration");
+    }
+
+    parseMetatype()
+    {
+        const node = this.startNode();
+        node.name = this.value;
+        this.next();
+        if( this.eat( tokTypes.parenL )  )
+        {
+            node.body = [];
+            while( this.type !== tokTypes.parenR )
+            {
+                const elem = this.startNode();
+                elem.name = this.value;
+
+                this.next();
+                if( this.eat(tokTypes.eq) )
+                {
+                    elem.value = this.parseMaybeAssign();
+                }
+                node.body.push( elem )
+                this.finishNode(elem, "AssignmentExpression");
+
+                if( !this.eat(tokTypes.comma) )
+                {
+                    break;
+                }
+            }
+            this.expect( tokTypes.parenR );
+        }
+        this.expect( tokTypes.bracketR );
+        return this.finishNode(node, "MetatypeDeclaration");
+    }
+
+    parseClassElement( constructorAllowsSuper )
+    {
+        if( this.eat( tokTypes.bracketL ) )
+        {
+           return this.parseMetatype();
+        }
+
+        if( this.type === tokTypes._annotation )
+        {
+           return this.parseAnnotation();
+        }
+
+        let modifier = this.startNode();
+        modifier.name = "public";
+
+        for(let name of ["public","protected","private"] )
+        {
+            if( this.eat( tokTypes[ "_"+name ] ) )
+            {
+                modifier.name = name;
+                break;
+            }
+        }
+
+        this.finishNode(modifier, "ModifierDeclaration");
+
+        const element = super.parseClassElement( constructorAllowsSuper );
+        element.modifier = modifier;
+        if( modifier.name !=="public" && element.key && element.key.name==="constructor" )
+        {
+            this.raise( element.key.start, `Constructor modifier can only be "public".`)
+        }
+        return element;
+
+    }
+
+    parseImport(node)
+    {
+        this.next();
+        if( this.type !== tokTypes.name )
+        {
+            this.unexpected();
+        }
+        node.specifiers= this.parseStatement("import");
+        return this.finishNode(node, "ImportDeclaration")
+    }
+
+    parsePackage(node, isStatement)
+    {
+        this.next();
+
+        var oldStrict = this.strict;
+        this.strict = true;
+        this.hasPackage = true;
+        node.body = [];
+
+        node.namespaces = this.parseChainIdentifier();
+        this.expect( tokTypes.braceL );
+        while( !this.eat(tokTypes.braceR) )
+        {
+            var element = this.parseStatement(null,true);
+            node.body.push(element);
+        }
+
+        this.strict = oldStrict;
+        return this.finishNode(node,  "PackageDeclaration")
+    }
+
+    eat( type )
+    {
+       if( tokTypes.arrow === type)
+       {
+           if( super.eat( tokTypes.colon ) )
+           {
+                this.arrowReturnType = this.arrowReturnType || {};
+                this.arrowReturnType[ this.lastTokEnd ] =  this.parseTypeStatement();
+           }
+       }
+       return super.eat( type );
+    }
+
+    parseArrowExpression(node, params, isAsync)
+    {
+        const start = this.lastTokStart;
+        const fn = super.parseArrowExpression( node, params, isAsync );
+        if( this.arrowReturnType )
+        {
+             fn.returnType = this.arrowReturnType[ start ];
+             delete this.arrowReturnType[ start ];
+        }
+       
+        return fn;
+    }
+
+    parseFunctionBody(node, isArrowFunction, isMethod)
+    {
+        if( !isArrowFunction && isMethod && this.type === tokTypes.colon )
+        {
+            this.next();
+            node.returnType = this.parseTypeStatement();
+        }
+        super.parseFunctionBody(node, isArrowFunction, isMethod);
+    }
+
+}
+
+
+
+ const obj = acorn.Parser.extend(function(Parser){
+    return EaseScript;
+ });
+
+
+//const obj=<U & T>{};
+
+//const obj = acorn.Parser.extend( jsx() );
+//code = `<div><li>===========</li></div>`;
+
+
+
+
+
+//Escodegen
+
+var code=`
+
+package com.test{
+
+    import aa.ccc;
+    import aa.ccc;
+
+    class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
+
+        private name123:string="dfdsfsd";
+
+        public age=50
+
+        public constructor()
+        {
+            const arr:Array< string, int, array<number,string>, com.bb.Person > = []; 
+        }
+
+        [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
+
+        private ss( ...types ){
+
+            const dd=(i:int.bb,b:string="123"):com.Person=>{
+                
+                return 5;
+
+            };
+
+            const data = {"name":123};
+
+            const b = [...data];
+
+            let c = {data};
+
+            let bg = {cc():int | string{
+
+            }}
+        }
+
+        
+        @Router(default="/cc")
+
+        protected method( name:string="jjjj", age:int | string=5 ):string & int
+        {
+
+            var str:string[] = ["a"];
+            var b:array<string> = [];
+
+            var c:int[] = [5,6,9,6];
+
+            // c:array<int>=[];
+
+            var c: string & int={};
+
+            t ?: b;
+
+            [ t ?: b ];
+
+            var b={
+                c: t ?: b
+            }
+
+
+            return c;
+
+        }
+ 
+    }
+    
+}
+
+
+/*
+
+var b = c = {
+    "name":5,
+    "sss":666,
+    jjjj:ssss,
+    age,
+    name(){
+
+    },
+    ...obj
+}
+
+function name( c:string ){
+
+    console.log(b);
+
+        var d = 5;
+        var b = i => i;
+}
+*/
+
+`;
+
+//  code = `var b = {
+
+//     name(name:string | int):int & string{
+//         var b:array<int & string,  bool | int > = [];
+//         var b:object<string,int> & int;
+//         return 1
+//     }
+// }`
+
+//code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
+
+
+const tokens = obj.parse(code);
+
+
+
+
+//console.log( tokens.body[0].body[2].body.body[3].value.body.body[4].declarations[0].init.properties[0].value );
+
+
+
+console.log( tokens.body[0] );
+
+
+
+
+
+
+
