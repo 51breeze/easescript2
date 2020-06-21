@@ -44,6 +44,16 @@ tokTypes._protected = keywordTypes["protected"];
 keywordTypes["public"] = new TokenType("public",{startsExpr: true});
 tokTypes._public = keywordTypes["public"];
 
+keywordTypes["static"] = new TokenType("static",{startsExpr: true});
+tokTypes._static = keywordTypes["static"];
+
+
+keywordTypes["when"] = new TokenType("when");
+tokTypes._when = keywordTypes["when"];
+
+keywordTypes["then"] = new TokenType("then",{startsExpr: true});
+tokTypes._then = keywordTypes["then"];
+
 tokTypes._annotation = new TokenType("@",{startsExpr: true});
 tokTypes._shortTernary = new TokenType("?:",{startsExpr: true,binop:1});
 
@@ -54,7 +64,7 @@ const EaseScript = class extends Parser {
         options = options || {};
         options.locations = true;
         super(options, input, startPos);
-        this.keywords =  new RegExp( this.keywords.source.replace(")$","|is|package|implements|public|protected|private)$") );
+        this.keywords =  new RegExp( this.keywords.source.replace(")$","|is|package|implements|static|public|protected|private|when|then)$") );
     }
 
     parseStatement(context, topLevel, exports)
@@ -68,16 +78,55 @@ const EaseScript = class extends Parser {
                 }
                 return this.parsePackage( this.startNode(), true );
             break;
+            case tokTypes._public : 
+                if( !topLevel )
+                {
+                    this.unexpected();
+                }
+
+                this.next();
+                var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
+                modifier.name = "public";
+
+                var node = this.parseStatement(null, topLevel, exports);
+                node.modifier = modifier;
+                return node;
+               
+            break;
+            case tokTypes._static:
+                
+                if( !topLevel )
+                {
+                    this.unexpected();
+                }
+
+                this.next();
+
+                var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
+                modifier.name = "static";
+                var node = this.parseStatement(null, topLevel, exports);
+                node.static = modifier;
+                return node;
+                
             case tokTypes._import:
-                if( !topLevel || !this.hasPackage )
+                if( !topLevel )
                 {
                     this.unexpected();
                 }
                 return this.parseImport( this.startNode() );
+            case tokTypes._when:
+                return this.parseWhenStatement( this.startNode() ); 
             default:   
         }
         return super.parseStatement(context, topLevel, exports);
+    }
 
+    parseWhenStatement(node) {
+        this.next();
+        node.test = this.parseParenExpression();
+        node.consequent = super.parseStatement("when");
+        node.alternate = this.eat(tokTypes._then) ? super.parseStatement("then") : null;
+        return this.finishNode(node, "WhenStatement")
     }
 
     readToken( code )
@@ -88,7 +137,7 @@ const EaseScript = class extends Parser {
             return this.finishToken(tokTypes._shortTernary);
         }
 
-       if( code == 64 )
+       if( code === 64 )
        {
           ++this.pos; 
           return this.finishToken(tokTypes._annotation);
@@ -350,6 +399,39 @@ const EaseScript = class extends Parser {
         return this.finishNode(node, "MetatypeDeclaration");
     }
 
+    parseModifier()
+    {
+        let staticNode = this.parseMethodStatic();
+        let modifier = this.startNode();
+        modifier.name = "public";
+        for(let name of ["public","protected","private"] )
+        {
+            if( this.eat( tokTypes[ "_"+name ] ) )
+            {
+                modifier.name = name;
+                break;
+            }
+        }
+        this.finishNode(modifier, "ModifierDeclaration");
+        if( !staticNode )
+        {
+            staticNode = this.parseMethodStatic();
+        }
+        return [modifier,staticNode];
+    }
+
+    parseMethodStatic()
+    {
+        let staticNode = null;
+        if( this.eat(tokTypes._static) )
+        {
+            staticNode = this.startNode();
+            staticNode.name = "static";
+            this.finishNode(staticNode, "ModifierDeclaration");
+        }
+        return staticNode;
+    }
+
     parseClassElement( constructorAllowsSuper )
     {
         if( this.eat( tokTypes.bracketL ) )
@@ -362,28 +444,27 @@ const EaseScript = class extends Parser {
            return this.parseAnnotation();
         }
 
-        let modifier = this.startNode();
-        modifier.name = "public";
+        let modifier = this.parseModifier();
+        const element = super.parseClassElement( constructorAllowsSuper );
 
-        for(let name of ["public","protected","private"] )
+        if ( modifier[0] )
         {
-            if( this.eat( tokTypes[ "_"+name ] ) )
+            element.modifier =  modifier[0];
+            if( element.modifier.name !=="public" && element.key && element.key.name==="constructor" )
             {
-                modifier.name = name;
-                break;
+                this.raise( element.key.start, `Constructor modifier can only be "public".`)
             }
         }
 
-        this.finishNode(modifier, "ModifierDeclaration");
-
-        const element = super.parseClassElement( constructorAllowsSuper );
-        element.modifier = modifier;
-        if( modifier.name !=="public" && element.key && element.key.name==="constructor" )
+        if( modifier[1] )
         {
-            this.raise( element.key.start, `Constructor modifier can only be "public".`)
+            element.static =  modifier[1];
+            if( element.key && element.key.name==="constructor" )
+            {
+                this.raise( element.key.start, `Constructor cannot is static method.`)
+            }
         }
         return element;
-
     }
 
     parseImport(node)
@@ -397,6 +478,11 @@ const EaseScript = class extends Parser {
         return this.finishNode(node, "ImportDeclaration")
     }
 
+    parseExport()
+    {
+        this.raise( this.lastTokStart, `Classes do not need to use an export.`);
+    }
+
     parsePackage(node, isStatement)
     {
         this.next();
@@ -407,11 +493,27 @@ const EaseScript = class extends Parser {
         node.body = [];
 
         node.namespaces = this.parseChainIdentifier();
-        this.expect( tokTypes.braceL );
-        while( !this.eat(tokTypes.braceR) )
+
+        if( this.type === tokTypes.semi )
         {
-            var element = this.parseStatement(null,true);
-            node.body.push(element);
+            this.next();
+        }
+
+        if( this.eat(tokTypes.braceL) )
+        {
+            while( !this.eat(tokTypes.braceR) )
+            {
+                var element = this.parseStatement(null,true);
+                node.body.push(element);
+            }
+
+        }else
+        {
+            while( tokTypes.eof !== this.type )
+            {
+                var element = this.parseStatement(null,true);
+                node.body.push(element);
+            }
         }
 
         this.strict = oldStrict;
@@ -481,7 +583,7 @@ package com.test{
     import aa.ccc;
     import aa.ccc;
 
-    class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
+    public class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
 
         private name123:string="dfdsfsd";
 
@@ -489,12 +591,28 @@ package com.test{
 
         public constructor()
         {
+            when( Runtime(server) ){
+
+                var i = 2;
+            
+                when( Syntax(php) ){
+            
+                }
+            
+            
+             }then{
+            
+                var i = 5;
+                 
+             }
+
             const arr:Array< string, int, array<number,string>, com.bb.Person > = []; 
         }
 
+        [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
 
-        private ss( ...types ){
+         private ss( ...types ){
 
             const dd=(i:int.bb,b:string="123"):com.Person=>{
                 
@@ -516,7 +634,7 @@ package com.test{
         
         @Router(default="/cc")
 
-        protected method( name:string="jjjj", age:int | string=5 ):string & int
+        static protected method( name:string="jjjj", age:int | string=5 ):string & int
         {
 
             var str:string[] = ["a"];
@@ -570,14 +688,29 @@ function name( c:string ){
 
 `;
 
-//  code = `var b = {
+//  code = `
+ 
 
-//     name(name:string | int):int & string{
-//         var b:array<int & string,  bool | int > = [];
-//         var b:object<string,int> & int;
-//         return 1
+//  package com.coo;
+
+//  import cc.mm;
+
+// public static class Person{
+
+//     constructor(){
+
 //     }
-// }`
+
+
+//     public static name(){
+
+//     }
+
+
+// }
+
+ 
+//  `
 
 //code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
 
@@ -591,7 +724,7 @@ const tokens = obj.parse(code);
 
 
 
-console.log( tokens.body[0] );
+console.log( tokens.body );
 
 
 
