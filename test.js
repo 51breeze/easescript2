@@ -1,6 +1,5 @@
 const acorn = require("acorn");
 
-const  lineBreak = /\r\n?|\n|\u2028|\u2029/;
 
  const
  SCOPE_TOP = 1,
@@ -93,6 +92,28 @@ const EaseScript = class extends Parser {
                 return node;
                
             break;
+
+            case tokTypes._protected : 
+                if( !topLevel )
+                {
+                    this.unexpected();
+                }
+
+                this.next();
+                var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
+                modifier.name = "protected";
+                var node = this.parseStatement(null, topLevel, exports);
+                node.modifier = modifier;
+                return node;
+               
+            break;
+
+            case tokTypes._private : 
+            
+                this.raise( this.lastTokStart, `Private modifier can only be used in class member methods`);
+
+            break;
+
             case tokTypes._static:
                 
                 if( !topLevel )
@@ -101,7 +122,6 @@ const EaseScript = class extends Parser {
                 }
 
                 this.next();
-
                 var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
                 modifier.name = "static";
                 var node = this.parseStatement(null, topLevel, exports);
@@ -174,7 +194,21 @@ const EaseScript = class extends Parser {
                 node.implements.push( this.parseChainIdentifier() );
             }while( this.eat(tokTypes.comma) );
         }
-    };
+    }
+
+    parseClassId(node, isStatement)
+    {
+        super.parseClassId(node, isStatement);
+        this.currentClassId = node.id;
+    }
+
+    parseClass(node, isStatement)
+    {
+        node = super.parseClass(node, isStatement);
+        this.currentClassId = null;
+        this.hasConstructor = false;
+        return node;
+    }
 
     parseClassMethod(method, isGenerator, isAsync, allowsDirectSuper)
     {
@@ -446,11 +480,24 @@ const EaseScript = class extends Parser {
 
         let modifier = this.parseModifier();
         const element = super.parseClassElement( constructorAllowsSuper );
+        const isConstruct = element && ( (element.key && element.key.name.toLowerCase()==="constructor") || 
+                                         (this.currentClassId && this.currentClassId.name === element.key.name)
+                                       );
+
+        if( isConstruct )
+        {
+            if( this.hasConstructor )
+            {
+               this.raise( this.lastTokStart, `Constructor has already been defined.`);
+            }
+
+            this.hasConstructor = true;
+        }
 
         if ( modifier[0] )
         {
             element.modifier =  modifier[0];
-            if( element.modifier.name !=="public" && element.key && element.key.name==="constructor" )
+            if( element.modifier.name !=="public" && isConstruct )
             {
                 this.raise( element.key.start, `Constructor modifier can only be "public".`)
             }
@@ -459,7 +506,7 @@ const EaseScript = class extends Parser {
         if( modifier[1] )
         {
             element.static =  modifier[1];
-            if( element.key && element.key.name==="constructor" )
+            if( isConstruct )
             {
                 this.raise( element.key.start, `Constructor cannot is static method.`)
             }
@@ -475,17 +522,22 @@ const EaseScript = class extends Parser {
             this.unexpected();
         }
         node.specifiers= this.parseStatement("import");
-        return this.finishNode(node, "ImportDeclaration")
+        return this.finishNode(node, "ImportDeclaration");
     }
 
     parseExport()
     {
-        this.raise( this.lastTokStart, `Classes do not need to use an export.`);
+        this.raise( this.lastTokStart, `Class do not need to use an export.`);
     }
 
     parsePackage(node, isStatement)
     {
         this.next();
+
+        if( this.hasPackage )
+        {
+            this.raise( this.lastTokStart, `Package has already been defined.`);
+        }
 
         var oldStrict = this.strict;
         this.strict = true;
@@ -589,7 +641,7 @@ package com.test{
 
         public age=50
 
-        public constructor()
+        constructor()
         {
             when( Runtime(server) ){
 
@@ -608,6 +660,7 @@ package com.test{
 
             const arr:Array< string, int, array<number,string>, com.bb.Person > = []; 
         }
+
 
         [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
