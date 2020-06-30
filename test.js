@@ -141,6 +141,35 @@ const EaseScript = class extends Parser {
         return super.parseStatement(context, topLevel, exports);
     }
 
+    parseExprAtom(refDestructuringErrors) 
+    {
+        var intersection = null;
+        switch ( this.type ) 
+        {
+           case tokTypes.relational :
+
+             if(this.value.length ===1 && this.value.charCodeAt(0) === 60 )
+             {
+                 this.next();
+                 intersection = this.parseTypeStatement();
+                 if( this.type===tokTypes.relational && this.value.charCodeAt(0) === 62)
+                 {
+                    this.next();
+                 }else{
+                     this.unexpected();
+                 }
+             }
+
+            break;
+        }
+        const node = super.parseExprAtom(refDestructuringErrors);
+        if( node && intersection)
+        {
+            node.acceptType = intersection;
+        }
+        return node;
+    }
+
     parseWhenStatement(node) {
         this.next();
         node.test = this.parseParenExpression();
@@ -262,12 +291,18 @@ const EaseScript = class extends Parser {
             const lastTokEnd = this.lastTokEnd;
             const lastTokEndLoc = this.lastTokEndLoc;
             const type   = this.parseChainIdentifier();
-            const unions = [];
+            const unions = [type];
+            const oldType = this.type;
             const operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
-
-            while( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+            
+            while( operator && this.eat(oldType) )
             {
                 unions.push( this.parseChainIdentifier() );
+            }
+
+            if( this.type ===tokTypes.bitwiseOR || this.type=== tokTypes.bitwiseAND )
+            {
+                this.unexpected();
             }
 
             if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
@@ -308,8 +343,6 @@ const EaseScript = class extends Parser {
                     genericType.body.push( this.parseTypeStatement() );
                 } 
                 node.value = this.finishNode(genericType, "GenericTypeDefinition" );
-                node.type = this.finishNodeAt(this.startNode(), "Identifier",  lastTokEnd, lastTokEndLoc)
-                node.type.name = "Array";
                 node.isArrayElement = true;
             }
 
@@ -317,10 +350,8 @@ const EaseScript = class extends Parser {
             {
                 node.operator = operator;
                 node.body = unions;
-
-            }else
-            {
-               node.type = type;
+            }else{
+                node.value = type;
             }
 
         }else
@@ -658,6 +689,8 @@ package com.test{
                  
              }
 
+            
+
             const arr:Array< string, int, array<number,string>, com.bb.Person > = []; 
         }
 
@@ -765,7 +798,8 @@ function name( c:string ){
  
 //  `
 
-//code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
+code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
+code = `   const obj=<U & T>{}; `;
 
 
 const tokens = obj.parse(code);
@@ -777,7 +811,7 @@ const tokens = obj.parse(code);
 
 
 
-console.log( tokens.body );
+console.log( tokens.body[0].declarations[0].init.acceptType );
 
 
 
