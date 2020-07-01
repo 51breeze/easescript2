@@ -228,7 +228,41 @@ const EaseScript = class extends Parser {
     parseClassId(node, isStatement)
     {
         super.parseClassId(node, isStatement);
+        if( node.id )
+        {
+            const genericTypes = this.parseGenericType();
+            if( genericTypes ){
+               node.id.genericTypes = genericTypes;
+            }
+        }
         this.currentClassId = node.id;
+    }
+
+    parseGenericType()
+    {
+        switch ( this.type ) 
+        {
+           case tokTypes.relational :
+
+            if(this.value.length ===1 && this.value.charCodeAt(0) === 60 )
+            {
+                 this.next();
+
+                 const genericType = [];
+                 do{
+                    genericType.push( this.parseTypeStatement() );
+                 }while( this.eat(tokTypes.comma) );
+                 if( this.type===tokTypes.relational && this.value.charCodeAt(0) === 62)
+                 {
+                    this.next();
+                 }else{
+                     this.unexpected();
+                 }
+                 return genericType;
+            }
+            break;
+        }
+        return false;
     }
 
     parseClass(node, isStatement)
@@ -511,6 +545,11 @@ const EaseScript = class extends Parser {
 
         let modifier = this.parseModifier();
         const element = super.parseClassElement( constructorAllowsSuper );
+
+
+        console.log( element.key.name )
+
+
         const isConstruct = element && ( (element.key && element.key.name.toLowerCase()==="constructor") || 
                                          (this.currentClassId && this.currentClassId.name === element.key.name)
                                        );
@@ -666,7 +705,7 @@ package com.test{
     import aa.ccc;
     import aa.ccc;
 
-    public class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
+    public class Test<U,T> extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
 
         private name123:string="dfdsfsd";
 
@@ -798,8 +837,8 @@ function name( c:string ){
  
 //  `
 
-code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
-code = `   const obj=<U & T>{}; `;
+//code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
+//code = `   const obj=<U & T>{}; `;
 
 
 const tokens = obj.parse(code);
@@ -811,7 +850,7 @@ const tokens = obj.parse(code);
 
 
 
-console.log( tokens.body[0].declarations[0].init.acceptType );
+console.log( tokens.body );
 
 
 
