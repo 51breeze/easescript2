@@ -180,12 +180,14 @@ const EaseScript = class extends Parser {
 
     readToken( code )
     {
+        //?:
         if( code===63 && this.input.charCodeAt(this.pos+1)===58)
         {
             this.pos+=2; 
             return this.finishToken(tokTypes._shortTernary);
         }
 
+        //@
        if( code === 64 )
        {
           ++this.pos; 
@@ -228,13 +230,6 @@ const EaseScript = class extends Parser {
     parseClassId(node, isStatement)
     {
         super.parseClassId(node, isStatement);
-        if( node.id )
-        {
-            const genericTypes = this.parseGenericType();
-            if( genericTypes ){
-               node.id.genericTypes = genericTypes;
-            }
-        }
         this.currentClassId = node.id;
     }
 
@@ -247,11 +242,11 @@ const EaseScript = class extends Parser {
             if(this.value.length ===1 && this.value.charCodeAt(0) === 60 )
             {
                  this.next();
-
                  const genericType = [];
                  do{
                     genericType.push( this.parseTypeStatement() );
                  }while( this.eat(tokTypes.comma) );
+
                  if( this.type===tokTypes.relational && this.value.charCodeAt(0) === 62)
                  {
                     this.next();
@@ -326,58 +321,62 @@ const EaseScript = class extends Parser {
             const lastTokEndLoc = this.lastTokEndLoc;
             const type   = this.parseChainIdentifier();
             const unions = [type];
-            const oldType = this.type;
-            const operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
+            var oldType = this.type;
+            var operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
             
-            while( operator && this.eat(oldType) )
+            if( operator )
             {
-                unions.push( this.parseChainIdentifier() );
-            }
-
-            if( this.type ===tokTypes.bitwiseOR || this.type=== tokTypes.bitwiseAND )
-            {
-                this.unexpected();
-            }
-
-            if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
-            {
-                const genericType = this.startNode();
-                genericType.body = [];
-                this.next();
-                while( !( this.type === tokTypes.relational && this.value.charCodeAt(0) === 62 && this.value.length===1 ) )
+                while( operator && this.eat(oldType) )
                 {
-                    genericType.body.push( this.parseTypeStatement() );
-                    if( !this.eat(tokTypes.comma) )
+                    unions.push( this.parseTypeStatement() );
+                }
+
+                if( this.type ===tokTypes.bitwiseOR || this.type=== tokTypes.bitwiseAND )
+                {
+                    this.unexpected();
+                }
+
+            }else 
+            {
+                const body = [];
+                if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
+                {
+                    this.next();
+                    while( !( this.type === tokTypes.relational && this.value.charCodeAt(0) === 62 && this.value.length===1 ) )
                     {
-                       break;
+                        body.push( this.parseTypeStatement() );
+                        if( !this.eat(tokTypes.comma) )
+                        {
+                            break;
+                        }
                     }
-                }
-                
-                this.next();
-                if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
-                {
-                    genericType.body.push( this.parseTypeStatement() );
-                }
-                node.value = this.finishNode(genericType, "GenericTypeDefinition" );
+                    
+                    this.next();
+                    if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+                    {
+                        body.push( this.parseTypeStatement() );
+                    }
+                    node.elementType = body;
 
-            }else if( this.type === tokTypes.bracketL )
-            {
-                const genericType = this.startNode();
-                genericType.body = [ type ];
+                }else if( this.type === tokTypes.bracketL )
+                {
+                    this.next();
+                    if( this.type !== tokTypes.bracketR )
+                    {
+                        this.unexpected(); 
+                    }else{
+                        this.next();
+                    }
 
-                this.next();
-                if( this.type !== tokTypes.bracketR )
-                {
-                    this.unexpected(); 
+                    oldType = this.type;
+                    operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
+                    if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
+                    {
+                        unions.push( this.parseTypeStatement() );
+                    } 
+                    node.isArrayElement = true;
                 }
-            
-                this.next();
-                if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
-                {
-                    genericType.body.push( this.parseTypeStatement() );
-                } 
-                node.value = this.finishNode(genericType, "GenericTypeDefinition" );
-                node.isArrayElement = true;
+
             }
 
             if( operator )
@@ -426,12 +425,21 @@ const EaseScript = class extends Parser {
 
     parseIdent(liberal, isBinding)
     {
-       const node = super.parseIdent(liberal, isBinding);
-       if( !liberal && this.eat( tokTypes.colon ) )
-       {
-           node.acceptType =  this.parseTypeStatement();
-       }
-       return node;
+        const node = super.parseIdent(liberal, isBinding);
+        if( !liberal && this.eat( tokTypes.colon ) )
+        {
+            node.acceptType =  this.parseTypeStatement();
+        }
+
+        //if( !liberal )
+        //{
+            const genericTypes = this.parseGenericType();
+            if( genericTypes ){
+                node.genericTypes = genericTypes;
+            }
+        //}
+    
+        return node;
     }
 
     parseAnnotation()
@@ -545,11 +553,6 @@ const EaseScript = class extends Parser {
 
         let modifier = this.parseModifier();
         const element = super.parseClassElement( constructorAllowsSuper );
-
-
-        console.log( element.key.name )
-
-
         const isConstruct = element && ( (element.key && element.key.name.toLowerCase()==="constructor") || 
                                          (this.currentClassId && this.currentClassId.name === element.key.name)
                                        );
@@ -759,17 +762,22 @@ package com.test{
         
         @Router(default="/cc")
 
-        static protected method( name:string="jjjj", age:int | string=5 ):string & int
+        static protected method<U,T>( name:string="jjjj", age:int | string=5 ):object[]
         {
 
             var str:string[] = ["a"];
             var b:array<string> = [];
 
-            var c:int[] = [5,6,9,6];
+            var tt:string & object = <string & object[] & int>{};
+
+            var c:int[] = [5,6,9,6 ];
 
             // c:array<int>=[];
 
             var c: string & int={};
+
+
+           // var b:<string & int> = 1;
 
             t ?: b;
 
