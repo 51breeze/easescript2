@@ -53,6 +53,15 @@ tokTypes._when = keywordTypes["when"];
 keywordTypes["then"] = new TokenType("then",{startsExpr: true});
 tokTypes._then = keywordTypes["then"];
 
+keywordTypes["enum"] = new TokenType("enum",{startsExpr: true});
+tokTypes._enum = keywordTypes["enum"];
+
+keywordTypes["interface"] = new TokenType("interface",{startsExpr: true});
+tokTypes._interface = keywordTypes["interface"];
+
+keywordTypes["abstract"] = new TokenType("abstract",{startsExpr: true});
+tokTypes._abstract = keywordTypes["abstract"];
+
 tokTypes._annotation = new TokenType("@",{startsExpr: true});
 tokTypes._shortTernary = new TokenType("?:",{startsExpr: true,binop:1});
 
@@ -63,10 +72,10 @@ const EaseScript = class extends Parser {
         options = options || {};
         options.locations = true;
         super(options, input, startPos);
-        this.keywords =  new RegExp( this.keywords.source.replace(")$","|is|package|implements|static|public|protected|private|when|then)$") );
+        this.keywords =  new RegExp( this.keywords.source.replace(")$","|is|package|implements|static|public|protected|private|when|then|enum|interface|abstract)$") );
     }
 
-    parseStatement(context, topLevel, exports)
+    parseStatement(context, topLevel, exports, isStatic)
     {
         switch ( this.type )
         {
@@ -77,6 +86,27 @@ const EaseScript = class extends Parser {
                 }
                 return this.parsePackage( this.startNode(), true );
             break;
+            case tokTypes._abstract : 
+                if( !topLevel || isStatic )
+                {
+                    this.unexpected();
+                }
+
+                var abstract = this.startNode();
+                abstract.name = "abstract";
+                this.next();
+
+                if( this.type !== tokTypes._class )
+                {
+                    this.unexpected();
+                }
+
+                this.finishNode(abstract,"ModifierDeclaration")
+                var node = this.parseClass(this.startNode(), true, true );
+                node.abstract = abstract;
+                return node;
+                
+            break;
             case tokTypes._public : 
                 if( !topLevel )
                 {
@@ -86,7 +116,6 @@ const EaseScript = class extends Parser {
                 this.next();
                 var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
                 modifier.name = "public";
-
                 var node = this.parseStatement(null, topLevel, exports);
                 node.modifier = modifier;
                 return node;
@@ -122,9 +151,10 @@ const EaseScript = class extends Parser {
                 }
 
                 this.next();
+
                 var modifier = this.finishNode(this.startNode(),"ModifierDeclaration");
                 modifier.name = "static";
-                var node = this.parseStatement(null, topLevel, exports);
+                var node = tokTypes._class === this.type ? this.parseClass(this.startNode(), true, false, true ) : this.parseStatement(null, topLevel, exports, true);
                 node.static = modifier;
                 return node;
                 
@@ -135,8 +165,15 @@ const EaseScript = class extends Parser {
                 }
                 return this.parseImport( this.startNode() );
             case tokTypes._when:
-                return this.parseWhenStatement( this.startNode() ); 
-            default:   
+                return this.parseWhenStatement( this.startNode() );
+
+            case tokTypes._enum:
+                return this.parseEnumStatement( this.startNode(), topLevel );
+
+            case tokTypes._interface:
+                if( !topLevel ) { this.unexpected(); }
+                return this.parseInterface( this.startNode(), topLevel );
+            default:
         }
         return super.parseStatement(context, topLevel, exports);
     }
@@ -170,12 +207,165 @@ const EaseScript = class extends Parser {
         return node;
     }
 
-    parseWhenStatement(node) {
+    parseWhenStatement(node) 
+    {
         this.next();
         node.test = this.parseParenExpression();
         node.consequent = super.parseStatement("when");
         node.alternate = this.eat(tokTypes._then) ? super.parseStatement("then") : null;
         return this.finishNode(node, "WhenStatement")
+    }
+
+    parseEnumStatement(node) 
+    {
+
+        this.next();
+        if (this.type === tokTypes.name)
+        {
+            node.name = this.value;
+        } else {
+            this.unexpected();
+        }
+
+        this.next();
+        if( this.type === tokTypes._extends  )
+        {
+            this.next();
+            node.extends = this.parseChainIdentifier();
+        }
+
+        this.expect( tokTypes.braceL );
+        node.value = this.parseExpression();
+        this.expect( tokTypes.braceR );
+        return this.finishNode(node, "EnumDeclaration")
+    }
+
+    parseInterfaceMethod(isAsync) 
+    {
+        var node = this.startNode();
+        node.async = !!isAsync;
+        this.expect(tokTypes.parenL);
+        node.params = this.parseBindingList(tokTypes.parenR, false, true);
+        return this.finishNode(node, "MethodExpression")
+    }
+
+    parseInterfaceElement()
+    {
+        if (this.eat(tokTypes.semi))
+        {
+             return null
+        }
+
+        const modifier = this.parseModifier();
+        const isProperty = this.type === tokTypes._const || this.type === tokTypes._var;
+        const element = isProperty ? this.parseVarStatement( this.startNode(), this.value ) : this.startNode();
+        if( !isProperty )
+        {
+            var tryContextual = (k, noLineBreak)=>{
+
+                if ( noLineBreak === void 0 ) noLineBreak = false;
+                var start = this.start, startLoc = this.startLoc;
+                if (!this.eatContextual(k)) { return false }
+                if (this.type !== tokTypes.parenL && (!noLineBreak || !this.canInsertSemicolon())) { return true }
+                if (element.key) { this.unexpected(); }
+                element.computed = false;
+                element.key = this.startNodeAt(start, startLoc);
+                element.key.name = k;
+                this.finishNode(element.key, "Identifier");
+                return false
+            };
+        
+            element.kind    = "element";
+            element.isAsync = tryContextual("async", true);
+
+            if (tryContextual("get")) {
+                element.kind = "get";
+            } else if (tryContextual("set")) {
+                element.kind = "set";
+            }
+
+            if (!element.key)
+            { 
+                this.parsePropertyName(element);
+            }
+        
+            var key = element.key;
+            if ( key.name === "constructor" )
+            {
+                this.raise(key.start, "Interface can't have Constructor");
+
+            } else if( key.name === "prototype" ) 
+            {
+                this.raise(key.start, "Interface may not have a property named prototype");
+            }
+            element.value = this.parseInterfaceMethod();
+            if (element.kind === "get" && element.value.params.length !== 0)
+                { this.raiseRecoverable(element.value.start, "getter should have no params"); }
+            if (element.kind === "set" && element.value.params.length !== 1)
+                { this.raiseRecoverable(element.value.start, "setter should have exactly one param"); }
+            if (element.kind === "set" && element.value.params[0].type === "RestElement")
+                { this.raiseRecoverable(element.value.params[0].start, "Setter cannot use rest params"); }
+
+            if( this.eat( tokTypes.colon ) )
+            {
+                element.returnType = this.parseTypeStatement();
+            }
+        }else{
+
+            if( element.declarations.length > 1 )
+            {
+                this.raise( element.start , `Interface member properties can only be declared one at a time.`)
+            }
+            if(  element.declarations[0].init )
+            {
+                this.raise( element.start , `Interface member properties cannot be have initial value.`)
+            }
+        }
+
+        if ( modifier[0] )
+        {
+            element.modifier =  modifier[0];
+            if( element.modifier.name !=="public" )
+            {
+                this.raise( modifier[0].start , `Interface member can only be "public" modifier.`)
+            }
+        }
+
+        if( modifier[1] )
+        {
+            this.raise( modifier[1].start, `Interface member cannot use "static" modifier `)
+        }
+        return element;
+    }
+
+    parseInterface(node) {
+
+        this.next();
+        var oldStrict = this.strict;
+        this.strict = true;
+        this.parseClassId(node, true);
+
+        if( this.type === tokTypes._extends  )
+        {
+            this.next();
+            node.extends = this.parseChainIdentifier();
+        }
+
+        var classBody = this.startNode();
+        classBody.body = [];
+        this.expect(tokTypes.braceL);
+
+        while (this.type !== tokTypes.braceR) 
+        {
+          var element = this.parseInterfaceElement();
+          if (element) {
+            classBody.body.push(element);
+          }
+        }
+        this.strict = oldStrict;
+        this.next();
+        node.body = this.finishNode(classBody, "InterfaceBody");
+        return this.finishNode(node,  "InterfaceDeclaration")
     }
 
     readToken( code )
@@ -216,10 +406,24 @@ const EaseScript = class extends Parser {
 
     parseClassSuper(node)
     {
-        node.superClass = this.eat(tokTypes._extends) ? this.parseChainIdentifier() : null;
+        node.superClass = null;
+        if(  this.eat(tokTypes._extends) )
+        {
+            if( this.isStaticClass )
+            {
+                this.raise(this.lastTokStart,"Static class cannot extends super class.");
+            }
+            node.superClass = this.parseChainIdentifier();
+        }
+        
         node.implements = null;
         if( this.eat(tokTypes._implements) )
         {
+            if( this.isStaticClass )
+            {
+                this.raise(this.lastTokStart,"Static class cannot implements interfaces.");
+            }
+
             node.implements = [];
             do{ 
                 node.implements.push( this.parseChainIdentifier() );
@@ -260,45 +464,11 @@ const EaseScript = class extends Parser {
         return false;
     }
 
-    parseClass(node, isStatement)
-    {
-        node = super.parseClass(node, isStatement);
-        this.currentClassId = null;
-        this.hasConstructor = false;
-        return node;
-    }
-
-    parseClassMethod(method, isGenerator, isAsync, allowsDirectSuper)
-    {
-        if( this.type !== tokTypes.parenL )
-        {
-            method.kind = "property";
-            const node = this.startNode();
-            node.value= this.value;
-
-            if( this.eat( tokTypes.colon ) )
-            {
-                method.acceptType = this.parseTypeStatement();
-            }
-
-            if( this.eat(tokTypes.eq) )
-            {
-                method.init = this.parseExpression();
-                method.operator = node;
-                this.finishNode(node, "Operator");
-            } 
-
-            this.semicolon();
-            return this.finishNode(method, "PropertyDefinition");
-        }
-        return super.parseClassMethod(method, isGenerator, isAsync, allowsDirectSuper);
-    }
-
     parseChainIdentifier()
     {
         const startPos = this.start, startLoc = this.startLoc;
         const type = this.type;
-        var base = super.parseIdent();
+        var base = super.parseIdent( type === tokTypes._void );
         this.checkLVal(base, BIND_NONE);
         while ( this.eat( tokTypes.dot ) ) 
         {
@@ -317,74 +487,32 @@ const EaseScript = class extends Parser {
        
         if( (this.type === tokTypes.name || this.type  === tokTypes._void) && this.type !== tokTypes.eof )
         {
-            const lastTokEnd = this.lastTokEnd;
-            const lastTokEndLoc = this.lastTokEndLoc;
-            const type   = this.parseChainIdentifier();
-            const unions = [type];
-            var oldType = this.type;
-            var operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
-            
-            if( operator )
+            node.value = this.parseChainIdentifier();
+            if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
             {
-                while( operator && this.eat(oldType) )
+                this.next();
+                const elements = [];
+                while( !( this.type === tokTypes.relational && this.value.charCodeAt(0) === 62 && this.value.length===1 ) )
                 {
-                    unions.push( this.parseTypeStatement() );
-                }
+                    elements.push( this.parseTypeStatement() );
+                    if( !this.eat(tokTypes.comma) )
+                    {
+                        break;
+                    }
+                } 
+                this.next();
+                node.value.typeElements = elements;
 
-                if( this.type ===tokTypes.bitwiseOR || this.type=== tokTypes.bitwiseAND )
-                {
-                    this.unexpected();
-                }
-
-            }else 
+            }else if( this.type === tokTypes.bracketL )
             {
-                const body = [];
-                if( this.type === tokTypes.relational && this.value.charCodeAt(0) === 60 && this.value.length===1 )
+                this.next();
+                if( this.type !== tokTypes.bracketR )
                 {
+                    this.unexpected(); 
+                }else{
                     this.next();
-                    while( !( this.type === tokTypes.relational && this.value.charCodeAt(0) === 62 && this.value.length===1 ) )
-                    {
-                        body.push( this.parseTypeStatement() );
-                        if( !this.eat(tokTypes.comma) )
-                        {
-                            break;
-                        }
-                    }
-                    
-                    this.next();
-                    if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
-                    {
-                        body.push( this.parseTypeStatement() );
-                    }
-                    node.elementType = body;
-
-                }else if( this.type === tokTypes.bracketL )
-                {
-                    this.next();
-                    if( this.type !== tokTypes.bracketR )
-                    {
-                        this.unexpected(); 
-                    }else{
-                        this.next();
-                    }
-
-                    oldType = this.type;
-                    operator = this.type === tokTypes.bitwiseOR ? "|" : ( this.type === tokTypes.bitwiseAND ? '&' : null );
-                    if( this.eat(tokTypes.bitwiseOR) || this.eat(tokTypes.bitwiseAND) )
-                    {
-                        unions.push( this.parseTypeStatement() );
-                    } 
-                    node.isArrayElement = true;
                 }
-
-            }
-
-            if( operator )
-            {
-                node.operator = operator;
-                node.body = unions;
-            }else{
-                node.value = type;
+                node.isArrayElement = true;
             }
 
         }else
@@ -431,14 +559,6 @@ const EaseScript = class extends Parser {
             node.acceptType =  this.parseTypeStatement();
         }
 
-        //if( !liberal )
-        //{
-            const genericTypes = this.parseGenericType();
-            if( genericTypes ){
-                node.genericTypes = genericTypes;
-            }
-        //}
-    
         return node;
     }
 
@@ -539,34 +659,57 @@ const EaseScript = class extends Parser {
         return staticNode;
     }
 
+    parseClass(node, isStatement, isAbstract,isStatic )
+    {
+        this.isAbstractClass = isAbstract;
+        this.isStaticClass   = isStatic;
+        node = super.parseClass(node, isStatement);
+        this.isAbstractClass = false;
+        this.isStaticClass   = false;
+        this.currentClassId = null;
+        this.hasConstructor = false;
+        return node;
+    }
+
     parseClassElement( constructorAllowsSuper )
     {
         if( this.eat( tokTypes.bracketL ) )
         {
-           return this.parseMetatype();
+            return this.parseMetatype();
         }
 
         if( this.type === tokTypes._annotation )
         {
-           return this.parseAnnotation();
+            return this.parseAnnotation();
         }
 
-        let modifier = this.parseModifier();
-        const element = super.parseClassElement( constructorAllowsSuper );
-        const isConstruct = element && ( (element.key && element.key.name.toLowerCase()==="constructor") || 
-                                         (this.currentClassId && this.currentClassId.name === element.key.name)
-                                       );
+        const modifier = this.parseModifier();
+        const isProperty = this.type === tokTypes._const || this.type === tokTypes._var;
+        const element = isProperty ? this.parseVarStatement( this.startNode(), this.value ) : super.parseClassElement( constructorAllowsSuper );
+        const isConstruct = !isProperty && element && ( (element.key && element.key.name.toLowerCase()==="constructor") || 
+                                        (this.currentClassId && this.currentClassId.name === element.key.name)
+                                    );
+
+        if( this.isAbstractClass && isConstruct )
+        {
+            this.raise( element.start, `Abstract class cannot defined constructor.`);
+        }   
+        
+        if( this.isStaticClass && isConstruct )
+        {
+            this.raise( element.start, `Static class cannot defined constructor.`);
+        }
 
         if( isConstruct )
         {
             if( this.hasConstructor )
             {
-               this.raise( this.lastTokStart, `Constructor has already been defined.`);
+                this.raise( this.lastTokStart, `Constructor has already been defined.`);
             }
 
             this.hasConstructor = true;
         }
-
+        
         if ( modifier[0] )
         {
             element.modifier =  modifier[0];
@@ -584,6 +727,7 @@ const EaseScript = class extends Parser {
                 this.raise( element.key.start, `Constructor cannot is static method.`)
             }
         }
+
         return element;
     }
 
@@ -708,11 +852,11 @@ package com.test{
     import aa.ccc;
     import aa.ccc;
 
-    public class Test<U,T> extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
+    public class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  {
 
-        private name123:string="dfdsfsd";
+        private var name123:string="dfdsfsd";
 
-        public age=50
+        public const age:int=50
 
         constructor()
         {
@@ -730,6 +874,19 @@ package com.test{
                 var i = 5;
                  
              }
+
+             this.method();
+
+             var b=1;
+
+             this.method < b ;
+
+             var [bb:string,cc:int] = [];
+
+
+             var {Red:string = 1, Green = 2, Blue = 4, } = {};
+
+            enum Color extends cc.com {Red = 1, Green = 2, Blue = 4 }
 
             
 
@@ -754,30 +911,29 @@ package com.test{
 
             let c = {data};
 
-            let bg = {cc():int | string{
+            let bg = {cc():int{
 
             }}
+
+
+            const [cc,bb] = [];
         }
 
         
         @Router(default="/cc")
 
-        static protected method<U,T>( name:string="jjjj", age:int | string=5 ):object[]
+        static protected method( name:string="jjjj", age:int):object[]
         {
 
             var str:string[] = ["a"];
             var b:array<string> = [];
 
-            var tt:string & object = <string & object[] & int>{};
-
+  
             var c:int[] = [5,6,9,6 ];
 
             // c:array<int>=[];
 
-            var c: string & int={};
-
-
-           // var b:<string & int> = 1;
+            var c: string={};
 
             t ?: b;
 
@@ -788,7 +944,15 @@ package com.test{
             }
 
 
+
+
             return c;
+
+        }
+
+
+        public get name(){
+
 
         }
  
@@ -846,7 +1010,38 @@ function name( c:string ){
 //  `
 
 //code = `  const arr:Array< Array<string, int, array<number,string> > > = [1,"54545454",[] ]; `;
-//code = `   const obj=<U & T>{}; `;
+// code = `  package com.test{
+
+//              public enum Color extends Person{
+
+//                Gree,
+//                Red,
+//                Black=9
+
+//              }
+//         }
+    
+//     `;
+
+
+// code = `  package com.test{
+
+//              public interface Color {
+
+//                   get name():string
+
+//                   set name (val:string):void
+
+//                  public avg():void
+
+//                   var address:string
+
+
+
+//              }
+//         }
+    
+//     `;
 
 
 const tokens = obj.parse(code);
@@ -859,6 +1054,8 @@ const tokens = obj.parse(code);
 
 
 console.log( tokens.body );
+
+
 
 
 
