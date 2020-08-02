@@ -11,7 +11,7 @@ package com.test.cc
 
         public static const age:int.cc.bb=50
 
-        constructor( name:string )
+        constructor( name:string="div" )
         {
 
 
@@ -31,7 +31,12 @@ package com.test.cc
                  
              }
 
-             this.method(()=>{}, 1);
+             this.method(()=>{
+
+                 this.method( this.method() );
+                 const p = 5;
+
+             }, 1);
 
              var b=1;
 
