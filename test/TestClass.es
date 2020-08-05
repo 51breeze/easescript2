@@ -11,8 +11,12 @@ package com.test.cc
 
         public static const age:int.cc.bb=50
 
-        constructor( name:string="div" )
+        Test( name:string="div" )
         {
+
+            function Na(name:string="5555"){
+
+            }
 
 
             when( Runtime(client) ){
@@ -37,6 +41,44 @@ package com.test.cc
                  const p = 5;
 
              }, 1);
+
+             var i= 6;
+
+             if( 1 ){
+                 var i = 5;
+             }
+
+             while( 1 ){
+
+             }
+
+             do{
+
+             }while(1)
+
+             switch( name ){
+
+                 case "o" : 
+                     this.mo();
+                 break;
+
+                 default :
+                  this.mmm();
+                
+             }
+
+             for( var i=0; i<10; ++i){
+                console.log( i );
+             }
+
+             for( var name in this ){
+
+             }
+
+             for( var value of this){
+
+             }
+
 
              var b=1;
 
