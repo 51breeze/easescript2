@@ -14,25 +14,40 @@ package com.test.cc
         Test( name:string="div" )
         {
 
-            function Na(name:string="5555"){
+            function NaTest(name:string="5555"){
 
             }
 
 
+            var i = 5;
+           
+
             when( Runtime(client) ){
 
-                var i = 2;
-                var whenss = "ok";
+               
+                  var whenss = "ok";
+                  //var i = 2;
             
                 when( Syntax(php) ){
+
+                    //var i = 1;
                     
+                }then{
+                    //var i = 5;
                 }
             
             
              }then{
             
-                var i = 5;
+               // var i = 5;
                  
+             }
+
+             try{
+
+
+             }catch(e:Error){
+
              }
 
              this.method(()=>{
@@ -42,10 +57,10 @@ package com.test.cc
 
              }, 1);
 
-             var i= 6;
+              i= 6;
 
              if( 1 ){
-                 var i = 5;
+                  i = 5;
              }
 
              while( 1 ){
@@ -67,11 +82,11 @@ package com.test.cc
                 
              }
 
-             for( var i=0; i<10; ++i){
+             for( var ii=0; ii<10; ++ii){
                 console.log( i );
              }
 
-             for( var name in this ){
+             for( var names in this ){
 
              }
 
