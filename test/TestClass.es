@@ -18,8 +18,13 @@ package com.test.cc
 
             }
 
+           
 
             var i = 5;
+
+            const ppi = 5;
+
+             console.log( i );
            
 
             when( Runtime(client) ){
