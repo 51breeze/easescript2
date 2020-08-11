@@ -11,10 +11,12 @@ package com.test.cc
 
         public static const age:int.cc.bb=50
 
-        Test( name:string="div" )
+        Test( name:string="div" ):Test
         {
 
-            function NaTest(name:string="5555"){
+            function NaTest(name:string="5555"):int{
+
+                return 666;
 
             }
 
@@ -123,7 +125,7 @@ package com.test.cc
         }
 
 
-     /*
+     
 
         [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
@@ -164,16 +166,11 @@ package com.test.cc
 
             // c:array<int>=[];
 
-            var c: string={};
+          
 
             t ?: b;
 
             [ t ?: b ];
-
-            var b={
-                c: t ?: b
-            }
-
 
 
 
@@ -187,7 +184,7 @@ package com.test.cc
 
         }
 
-  */
+  
  
     }
   
