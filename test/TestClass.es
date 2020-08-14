@@ -20,6 +20,12 @@ package com.test.cc
 
             }
 
+
+            var nss = {
+                name:5666,
+                age:65
+            }
+
            
 
             var i = 5;
@@ -140,7 +146,8 @@ package com.test.cc
 
             const data = {"name":123};
 
-            const b = [...data];
+            const b = [6,...data,9];
+            const bbb = {...data,name,ccc, ...b};
 
             let c = {data};
 
@@ -148,8 +155,9 @@ package com.test.cc
 
             }}
 
+            const {name:string=666, ccc=666999} = data;
 
-            const [cc,bb] = [];
+            const [cc,bb=2] = [];
         }
 
         
