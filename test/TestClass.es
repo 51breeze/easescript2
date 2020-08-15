@@ -13,6 +13,7 @@ package com.test.cc
 
         Test( name:string="div" ):Test
         {
+            /*
 
             function NaTest(name:string="5555"):int{
 
@@ -128,10 +129,29 @@ package com.test.cc
             }
             
             const arrs:Array< string, int, array<number,string>, com.bb.Person > = []; 
+
+            */
+
+            const dd=(i:int.bb,b:string="123"):com.Person=>{
+                
+                return 5;
+
+            };
+
+           const cs=function(){
+
+           };
+
+           var b = "555";
+           var btt = 555;
+           var dds = /\s+/i;
+
+           var db = new comm.Date(4,item=>{item} );
+
         }
 
 
-     
+     /*
 
         [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
@@ -191,6 +211,8 @@ package com.test.cc
 
 
         }
+
+        */
 
   
  
