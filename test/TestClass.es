@@ -27,6 +27,8 @@ package com.test.cc
                 age:65
             }
 
+            var {dd:string="456"} = nss;
+
            
 
             var i = 5;
@@ -132,6 +134,9 @@ package com.test.cc
 
             */
 
+            var {ddss:string="456"} = {"ddss":dd};
+            var [ddss999:string="456",ioo:int]= dddd;
+
             const dd=(i:int.bb,b:string="123"):com.Person=>{
                 
                 return 5;
@@ -147,6 +152,21 @@ package com.test.cc
            var dds = /\s+/i;
 
            var db = new comm.Date(4,item=>{item} );
+
+           var cc = (bb && btt);
+
+           var ttt={
+               ss:666,
+               bb:{
+                   "qq":"ooo",
+                   db
+               }
+           }
+
+           var ds = 2 || 3;
+
+
+        
 
         }
 
