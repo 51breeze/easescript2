@@ -1,15 +1,14 @@
-package com.test.cc
+package com.test
 {
 
-    import aa.ccc;
-    import aa.uuu;
 
-    public class Test extends com.bb.Person implements com.bb.IDisplay,com.bb.IDisplayss  
+
+    public class Test extends Object 
     {
 
         private var name123:string="dfdsfsd";
 
-        public static const age:int.cc.bb=50
+        public static const age:int=50
 
         Test( name:string="div" ):Test
         {
@@ -137,11 +136,17 @@ package com.test.cc
             var {ddss:string="456"} = {"ddss":dd};
             var [ddss999:string="456",ioo:int]= dddd;
 
-            const dd=(i:int.bb,b:string="123"):com.Person=>{
+             this.method();
+
+            const dd=(i:int,b:string="123"):com.Person=>{
+
+               
                 
                 return 5;
 
             };
+
+            const ls:Class = com.Person;
 
            const cs=function(){
 
@@ -151,7 +156,7 @@ package com.test.cc
            var btt = 555;
            var dds = /\s+/i;
 
-           var db = new comm.Date(4,item=>{item} );
+           var db = new Date(4,item=>{ this.method } );
 
            var cc = (bb && btt);
 
