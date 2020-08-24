@@ -10,6 +10,11 @@ package com.test
 
         public static const age:int=50
 
+        static fc()
+        {
+
+        }
+
         Test( name:string="div" ):Test
         {
             /*
@@ -138,7 +143,7 @@ package com.test
 
              this.method();
 
-            const dd=(i:int,b:string="123"):com.Person=>{
+            const dd=(i:int,b:string="123"):int=>{
 
                
                 
@@ -146,7 +151,7 @@ package com.test
 
             };
 
-            const ls:Class = com.Person;
+            const ls:Class = com.test.Test;
 
            const cs=function(){
 
@@ -176,14 +181,14 @@ package com.test
         }
 
 
-     /*
+ 
 
         [Runtime(server)]
-        [Router(value ="/ss", method=post, param=4555,type=com.cc.bb )]
+        [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
 
          private ss( ...types ){
 
-            const dd=(i:int.bb,b:string="123"):com.Person=>{
+            const dd=(i:int,b:string="123"):int=>{
                 
                 return 5;
 
@@ -208,7 +213,7 @@ package com.test
         
         @Router(default="/cc", ppp)
 
-        static protected method( name:string="jjjj", age:int):object[]
+        protected method( name:string="jjjj", age:int):object[]
         {
 
             var str:string[] = ["a"];
@@ -237,7 +242,7 @@ package com.test
 
         }
 
-        */
+        
 
   
  
