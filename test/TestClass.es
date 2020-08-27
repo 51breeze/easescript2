@@ -17,21 +17,22 @@ package com.test
 
         Test( name:string="div" ):Test
         {
-            /*
+            
 
             function NaTest(name:string="5555"):int{
+
+               
 
                 return 666;
 
             }
-
 
             var nss = {
                 name:5666,
                 age:65
             }
 
-            var {dd:string="456"} = nss;
+            var {dd:string="456", aa} = nss;
 
            
 
@@ -39,7 +40,7 @@ package com.test
 
             const ppi = 5;
 
-             console.log( i );
+           //  console.log( i );
            
 
             when( Runtime(client) ){
@@ -94,11 +95,11 @@ package com.test
              switch( name ){
 
                  case "o" : 
-                     this.mo();
+                     //this.mo();
                  break;
 
                  default :
-                  this.mmm();
+                 // this.mmm();
                 
              }
 
@@ -124,26 +125,26 @@ package com.test
              var [bb:string,cc:int] = arr;
 
              var bbc={
-                 bb:uuu,ii:666
+                 bb:"uuu",ii:666
              }  
 
 
              var {Red:string = 1, Green = 2, Blue = 4, } = bbc;
 
-            enum Color extends cc.com {
+            enum Color extends com {
                 Red = 1, Green = 2, Blue = 4 
             }
             
             const arrs:Array< string, int, array<number,string>, com.bb.Person > = []; 
 
-            */
+            
 
             var {ddss:string="456"} = {"ddss":dd};
             var [ddss999:string="456",ioo:int]= dddd;
 
              this.method();
 
-            const dd=(i:int,b:string="123"):int=>{
+            const ddc=(i:int,b:string="123"):int=>{
 
                
                 
@@ -157,13 +158,13 @@ package com.test
 
            };
 
-           var b = "555";
+           
            var btt = 555;
            var dds = /\s+/i;
 
            var db = new Date(4,item=>{ this.method } );
 
-           var cc = (bb && btt);
+           var ccv = (bb && btt);
 
            var ttt={
                ss:666,
@@ -197,7 +198,7 @@ package com.test
             const data = {"name":123};
 
             const b = [6,...data,9];
-            const bbb = {...data,name,ccc, ...b};
+            const bbb = {...data, ...b};
 
             let c = {data};
 
