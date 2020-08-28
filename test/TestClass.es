@@ -32,7 +32,7 @@ package com.test
                 age:65
             }
 
-            var {dd:string="456", aa} = nss;
+            var {dd:string="456", age} = NaTest();
 
            
 
@@ -226,12 +226,6 @@ package com.test
             // c:array<int>=[];
 
           
-
-            t ?: b;
-
-            [ t ?: b ];
-
-
 
             return c;
 
