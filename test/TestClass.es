@@ -32,7 +32,11 @@ package com.test
                 age:65
             }
 
-            var {dd:string="456", age} = NaTest();
+            var {dd:string="456", age} = {
+                name:5666,
+                dd:123,
+                age:65
+            };
 
            
 
@@ -122,10 +126,14 @@ package com.test
 
              var arr=[];
 
-             var [bb:string,cc:int] = arr;
+             var [bb:string,cc:int] = [1,2];
 
              var bbc={
-                 bb:"uuu",ii:666
+                 bb:"uuu",
+                 ii:666,
+                 Red:1,
+                 Green:4,
+                 Blue:6
              }  
 
 
@@ -140,7 +148,7 @@ package com.test
             
 
             var {ddss:string="456"} = {"ddss":dd};
-            var [ddss999:string="456",ioo:int]= dddd;
+            var [ddss999:string="456",ioo:int]= arr;
 
              this.method();
 
@@ -195,7 +203,7 @@ package com.test
 
             };
 
-            const data = {"name":123};
+            const data = {"name":123,ccc:666};
 
             const b = [6,...data,9];
             const bbb = {...data, ...b};
