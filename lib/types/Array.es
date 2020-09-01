@@ -1,11 +1,11 @@
-namespace
+package
 {
-    interface Array 
+    declarator Array 
     {
        static public from(target:Iterator,callback:Function=null):Array;
        static public isArray(target:any):Boolean;
        public constructor(...elements);
-       public concat(...items):Array;
+       public concat(...elements):Array;
        public copyWithin(target:int, start:int=0, end:int=-1):Array;
        public entries():Iterator;
        public every(callback:Function,thisArg=null):Boolean;

@@ -1,6 +1,6 @@
-namespace
+package
 {   
-    interface Iterator 
+    declarator Iterator 
     {
        public next():IteratorItem;
     }

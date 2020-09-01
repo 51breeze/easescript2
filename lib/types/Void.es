@@ -1,0 +1,4 @@
+package
+{
+    declarator void {}
+}

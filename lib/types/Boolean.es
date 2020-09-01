@@ -1,6 +1,6 @@
-namespace
+package
 {
-    interface Boolean 
+    declarator Boolean 
     {
        public constructor( value:any );
     }
