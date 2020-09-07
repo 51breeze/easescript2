@@ -2,6 +2,6 @@ package
 {
     declarator console 
     {
-       static log(...args):void;
+       static log(...args ):void;
     }
 }

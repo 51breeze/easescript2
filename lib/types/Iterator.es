@@ -2,6 +2,6 @@ package
 {   
     declarator Iterator 
     {
-       public next():IteratorItem;
+       public next():object;
     }
 }

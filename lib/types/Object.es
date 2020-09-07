@@ -9,7 +9,7 @@ package
        public propertyIsEnumerable( prop:String ):Boolean;
        public isPrototypeOf( object:Object ):Boolean;
        public toString():String;
-       public valueOf():Any;
+       public valueOf():any;
        public toLocaleString():String;
     }
 }
