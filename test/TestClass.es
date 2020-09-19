@@ -139,7 +139,7 @@ package com.test
 
              var {Red:string = 1, Green = 2, Blue = 4, } = bbc;
 
-            enum Color extends com {
+            enum Color {
                 Red = 1, Green = 2, Blue = 4 
             }
             
