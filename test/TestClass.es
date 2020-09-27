@@ -19,7 +19,7 @@ package com.test
         {
             
 
-            function NaTest(name:string="5555"):int{
+            function NaTest(name:string="5555", ...sss):int{
 
                
 
@@ -149,6 +149,9 @@ package com.test
 
             var {ddss:string="456"} = {"ddss":dd};
             var [ddss999:string="456",ioo:int]= arr;
+
+
+            var {ttts:string="456"} = this.method;
 
              this.method();
 
