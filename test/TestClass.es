@@ -34,7 +34,7 @@ package com.test
 
             var {dd:string="456", age} = {
                 name:5666,
-                dd:123,
+                dd:"123",
                 age:65
             };
 
@@ -143,7 +143,7 @@ package com.test
                 Red = 1, Green = 2, Blue = 4 
             }
             
-            const arrs:Array< string, int, array<number,string>, com.bb.Person > = []; 
+            const arrs:Array< string, int, array<number,string> > = []; 
 
             
 
@@ -228,8 +228,10 @@ package com.test
         protected method( name:string="jjjj", age:int):object[]
         {
 
-            var str:string[] = ["a"];
-            var b:array<string> = [];
+            var str:string[] = ["a","1"];
+            var b:array<string, array<string,int> > = ["", ["1",1] , {} ];
+
+            //b.push( 1 )
 
   
             var c:int[] = [5,6,9,6 ];
