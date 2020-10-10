@@ -231,6 +231,8 @@ package com.test
             var str:string[] = ["a","1"];
             var b:array<string, array<string,int> > = ["", ["1",1] , {} ];
 
+            //var x:[number,int,string] = [];
+
             //b.push( 1 )
 
   
