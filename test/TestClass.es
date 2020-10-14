@@ -143,7 +143,7 @@ package com.test
                 Red = 1, Green = 2, Blue = 4 
             }
             
-            const arrs:Array< string, int, array<number,string> > = []; 
+           // const arrs:Array< string, int, array<number,string> > = []; 
 
             
 
@@ -228,15 +228,15 @@ package com.test
         protected method( name:string="jjjj", age:int):object[]
         {
 
-            var str:string[] = ["a","1"];
-            var b:array<string, array<string,int> > = ["", ["1",1] ];
+            //var str:string[] = ["a","1"];
+            var b:array<string, array<string,int> > = ["", ["1",1], "true" ];
 
             //var x:[number,int,string] = [];
 
             //b.push( 1 )
 
   
-            var c:int[] = [5,6,9,6 ];
+            var c:int[] = [5,6,9,6];
 
             // c:array<int>=[];
 
