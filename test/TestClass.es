@@ -15,8 +15,10 @@ package com.test
 
         }
 
-        Test( name:string="div" ):Test
+        constructor( name:string="div" ):Test
         {
+
+               this.method("",1).substr(0,5);
             
 
             function NaTest(name:string="5555", ...sss):int{
@@ -75,12 +77,7 @@ package com.test
 
              }
 
-             this.method(()=>{
-
-                 this.method( this.method() );
-                 const p = 5;
-
-             }, 1);
+             this.method("", 1);
 
               i= 6;
 
@@ -153,7 +150,7 @@ package com.test
 
             var {ttts:string="456"} = this.method;
 
-             this.method();
+          
 
             const ddc=(i:int,b:string="123"):int=>{
 
@@ -188,6 +185,9 @@ package com.test
            var ds = 2 || 3;
 
 
+           Number( 3 );
+
+
         
 
         }
@@ -217,15 +217,18 @@ package com.test
 
             }}
 
+            var sss:number = NaN;
+
             const {name:string=666, ccc=666999} = data;
 
             const [cc,bb=2] = [];
+
         }
 
         
         @Router(default="/cc", ppp)
 
-        protected method( name:string="jjjj", age:int):object[]
+        protected method( name:string="jjjj", age:int)
         {
 
             //var str:string[] = ["a","1"];
@@ -236,7 +239,7 @@ package com.test
             //b.push( 1 )
 
   
-            var c:int[] = [5,6,9,6];
+            var c:string = "6666";
 
             // c:array<int>=[];
 
