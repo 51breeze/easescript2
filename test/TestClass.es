@@ -18,7 +18,7 @@ package com.test
         constructor( name:string="div" ):Test
         {
 
-               this.method("",1).substr(0,5);
+              // this.method("",1).substr(0,5);
             
 
             function NaTest(name:string="5555", ...sss):int{
