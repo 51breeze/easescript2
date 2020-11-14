@@ -1,4 +1,5 @@
 #!/usr/bin/env node  
+
 const program = require('commander');
 program
 .version( 'EaseScript '+require('../package.json').version )

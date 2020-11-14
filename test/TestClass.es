@@ -10,7 +10,7 @@ package com.test
 
         public static const age:int=50
 
-        static fc()
+        static fc():object
         {
 
         }
