@@ -16,7 +16,7 @@ package
         static parseFloat( value:any ):number;
         static parseInt( value:any ):number;
 
+        [Callable(params=[value:any],returnType=number)]
         constructor( value:any );
-        Callable( value:any ):number;
     }
 }

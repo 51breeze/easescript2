@@ -19,12 +19,11 @@ package com.test
         {
 
               // this.method("",1).substr(0,5);
-            
+
 
             function NaTest(name:string="5555", ...sss):int{
 
                
-
                 return 666;
 
             }
