@@ -39,6 +39,8 @@ package com.test
                 age:65
             };
 
+            dd = "sfdfsd"
+
            
 
             var i = 5;
@@ -133,7 +135,7 @@ package com.test
              }  
 
 
-             var {Red:string = 1, Green = 2, Blue = 4, } = bbc;
+             var {Red:int = 1, Green = 2, Blue = 4, } = bbc;
 
             enum Color {
                 Red = 1, Green = 2, Blue = 4 
@@ -146,6 +148,7 @@ package com.test
             var {ddss:string="456"} = {"ddss":dd};
             var [ddss999:string="456",ioo:int]= arr;
 
+            ddss999 = 'ssss';
 
             var {ttts:string="456"} = this.method;
 
@@ -218,7 +221,7 @@ package com.test
 
             var sss:number = NaN;
 
-            const {name:string=666, ccc=666999} = data;
+            const {name:string="666", ccc=666999} = data;
 
             const [cc,bb=2] = [];
 
