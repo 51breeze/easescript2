@@ -124,7 +124,7 @@ package com.test
 
              var arr=[];
 
-             var [bb:string,cc:int] = [1,2];
+             var [bb:int,cc:int] = [1,2];
 
              var bbc={
                  bb:"uuu",
@@ -223,7 +223,7 @@ package com.test
 
             const {name:string="666", ccc=666999} = data;
 
-            const [cc,bb=2] = [];
+            const [cc,bb=2] = [0];
 
         }
 
