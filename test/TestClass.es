@@ -233,7 +233,7 @@ package com.test
         protected method( name:string="jjjj", age:int)
         {
 
-            //var str:string[] = ["a","1"];
+            var str:string[] = ["a","1",1];
             var b:array<string, array<string,int> > = ["", ["1",1], "true" ];
 
             //var x:[number,int,string] = [];
