@@ -18,5 +18,13 @@ package
 
         [Callable(params=[value:any],returnType=number)]
         constructor( value:any );
+
+        toExponential();
+        toFixed();
+        toLocaleString();
+        toPrecision();
+        toSource();
+        toString();
+        valueOf();
     }
 }

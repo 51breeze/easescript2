@@ -12,13 +12,17 @@ package com.test
 
         static fc():object
         {
-
+            return {};
         }
 
         constructor( name:string="div" ):Test
         {
 
               // this.method("",1).substr(0,5);
+
+              this.name;
+
+              this.name = "123";
 
 
             function NaTest(name:string="5555", ...sss):int{
@@ -78,7 +82,7 @@ package com.test
 
              }
 
-             this.method("", 1);
+            // this.method("", 1);
 
               i= 6;
 
@@ -135,10 +139,10 @@ package com.test
              }  
 
 
-             var {Red:int = 1, Green = 2, Blue = 4, } = bbc;
+             var {Red:int = 1, Green = 2, Blue = 4, } = this.method();
 
             enum Color {
-                Red = 1, Green = 2, Blue = 4 
+                Red = 1, Green = 2, Blue
             }
             
            // const arrs:Array< string, int, array<number,string> > = []; 
@@ -171,6 +175,7 @@ package com.test
            
            var btt = 555;
            var dds = /\s+/i;
+           var $this = 666;
 
            var db = new Date(4,item=>{ this.method } );
 
@@ -187,8 +192,8 @@ package com.test
            var ds = 2 || 3;
 
 
-           Number( 3 );
-
+           Number.isNaN(1);
+           Number(1).valueOf()
 
         
 
@@ -216,7 +221,7 @@ package com.test
             let c = {data};
 
             let bg = {cc():int{
-
+                 return 1;
             }}
 
             var sss:number = NaN;
@@ -233,7 +238,7 @@ package com.test
         protected method( name:string="jjjj", age:int)
         {
 
-            var str:string[] = ["a","1",1];
+            var str:string[] = ["a","1"];
             var b:array<string, array<string,int> > = ["", ["1",1], "true" ];
 
             //var x:[number,int,string] = [];
@@ -246,16 +251,25 @@ package com.test
             // c:array<int>=[];
 
           
+          var dd = { Red:1 };
 
-            return c;
+            return dd;
+
+        }
+
+
+        public get name():string{
+       
+
+            return "1";
 
         }
 
-
-        public get name(){
-
+        public set name( value:string ){
 
         }
+
+        
 
         
 
