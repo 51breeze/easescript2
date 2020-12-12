@@ -10,15 +10,22 @@ package com.test
 
         public static const age:int=50
 
-        static fc():object
+        static fc():Class
         {
-            return {};
+            var dd:Class = Test;
+            return dd;
+        }
+
+        static get uuName(){
+            return '';
         }
 
         constructor( name:string="div" ):Test
         {
 
-              // this.method("",1).substr(0,5);
+               this.method("",1).substr();
+
+               Test.fc().uuName.substr();
 
               this.name;
 
@@ -26,10 +33,7 @@ package com.test
 
 
             function NaTest(name:string="5555", ...sss):int{
-
-               
                 return 666;
-
             }
 
             var nss = {
@@ -139,7 +143,7 @@ package com.test
              }  
 
 
-             var {Red:int = 1, Green = 2, Blue = 4, } = this.method();
+             var {Red:int = 1, Green = 2, Blue = 4, } = this.method("",4);
 
             enum Color {
                 Red = 1, Green = 2, Blue
@@ -244,6 +248,8 @@ package com.test
             //var x:[number,int,string] = [];
 
             //b.push( 1 )
+
+            return "sssss";
 
   
             var c:string = "6666";
