@@ -16,20 +16,24 @@ package com.test
             return dd;
         }
 
-        static get uuName(){
+        static get uuName():string{
+           
             return '';
         }
+
+       
+
 
         constructor( name:string="div" ):Test
         {
 
                this.method("",1).substr();
 
-               Test.fc().uuName.substr();
+               Test.fc().uuName;
 
-              this.name;
+               Test.fc().uuName.substr(5);
 
-              this.name = "123";
+              this.name = "1";
 
 
             function NaTest(name:string="5555", ...sss):int{
@@ -134,6 +138,8 @@ package com.test
 
              var [bb:int,cc:int] = [1,2];
 
+             var dsss:array = [...arr];
+
              var bbc={
                  bb:"uuu",
                  ii:666,
@@ -199,6 +205,8 @@ package com.test
            Number.isNaN(1);
            Number(1).valueOf()
 
+           this.ss(1,5, "6");
+
         
 
         }
@@ -209,7 +217,7 @@ package com.test
         [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
 
-         private ss( ...types ){
+         private ss( ...types:[int,number, ...string ] ){
 
             const dd=(i:int,b:string="123"):int=>{
                 
@@ -243,11 +251,17 @@ package com.test
         {
 
             var str:string[] = ["a","1"];
-            var b:array<string, array<string,int> > = ["", ["1",1], "true" ];
+            var b:[string, [string,int] ] = ["", ["1",1], "true" ];
 
-            //var x:[number,int,string] = [];
+            var cc:[number] = [1];
+
+
+            var x:[number,int,string,...object] = [1,1,'2222',{}];
 
             //b.push( 1 )
+
+
+
 
             return "sssss";
 
