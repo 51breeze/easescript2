@@ -1,8 +1,6 @@
 package com.test
 {
 
-
-
     public class Test extends Object 
     {
 
@@ -21,8 +19,9 @@ package com.test
             return '';
         }
 
-       
+         private static var iiu:Class = Test;
 
+    
 
         constructor( name:string="div" ):Test
         {
@@ -34,6 +33,18 @@ package com.test
                Test.fc().uuName.substr(5);
 
               this.name = "1";
+
+              var ccc:[number,string] = [2,''];
+
+              Test.iiu.uuName;
+
+
+             ccc.push( 2 );
+
+             ccc.push( '9999' );
+             ccc.push( 2 );
+
+            var bbpp:number = ccc.pop();
 
 
             function NaTest(name:string="5555", ...sss):int{
