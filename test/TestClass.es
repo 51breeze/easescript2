@@ -38,15 +38,17 @@ package com.test
 
               Test.iiu.uuName;
 
+             (String) ccc;
+
 
              ccc.push( 2 );
 
              ccc.push( '9999' );
-             //ccc.push( true );
+             ccc.push( 1 );
 
             var bbpp:number|string = ccc.pop();
 
-            bbpp = 1;
+            bbpp = 'llll';
 
 
             function NaTest(name:string="5555", ...sss):int{
