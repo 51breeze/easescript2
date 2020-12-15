@@ -42,9 +42,11 @@ package com.test
              ccc.push( 2 );
 
              ccc.push( '9999' );
-             ccc.push( 2 );
+             //ccc.push( true );
 
-            var bbpp:number = ccc.pop();
+            var bbpp:number|string = ccc.pop();
+
+            bbpp = 1;
 
 
             function NaTest(name:string="5555", ...sss):int{
@@ -216,7 +218,7 @@ package com.test
            Number.isNaN(1);
            Number(1).valueOf()
 
-           this.ss(1,5, "6");
+           this.ss(1, 5, "6");
 
         
 
@@ -269,7 +271,7 @@ package com.test
 
             var x:[number,int,string,...object] = [1,1,'2222',{}];
 
-            //b.push( 1 )
+            b.push( '1' )
 
 
 
