@@ -41,9 +41,9 @@ package com.test
              // this.name =  Test.fc()
 
 
-             this.name instanceof Test;
+           //  this instanceof Test;
 
-               this.name is Test;
+               this is Test;
 
 
               var iiss:string = true as string;
