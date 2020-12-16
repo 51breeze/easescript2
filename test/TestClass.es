@@ -30,7 +30,7 @@ package com.test
 
                Test.fc().uuName;
 
-               Test.fc().uuName.substr(5);
+               Test.fc().uuName.substr( 5 );
 
               this.name = "1";
 
@@ -38,7 +38,21 @@ package com.test
 
               Test.iiu.uuName;
 
-             (String) ccc;
+             // this.name =  Test.fc()
+
+
+             this.name instanceof Test;
+
+               this.name is Test;
+
+
+              var iiss:string = true as string;
+
+            // var iiiii:number = this.name;
+             // (string) ccc;
+
+
+
 
 
              ccc.push( 2 );
