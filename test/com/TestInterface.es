@@ -1,4 +1,4 @@
-package com.test
+package test.com
 {
     public interface Color {
         get name():string

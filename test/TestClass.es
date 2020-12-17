@@ -1,6 +1,8 @@
 package com.test
 {
 
+    import test.com.TestInterface;
+
     public class Test extends Object 
     {
 
@@ -19,9 +21,7 @@ package com.test
             return '';
         }
 
-         private static var iiu:Class = Test;
-
-    
+        private static var iiu:Class = Test;
 
         constructor( name:string="div" ):Test
         {
