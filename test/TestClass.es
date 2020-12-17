@@ -178,7 +178,7 @@ package com.test
              }  
 
 
-             var {Red:int = 1, Green = 2, Blue = 4, } = this.method("",4);
+             var {Red:int = 1, Green = 2, Blue, } = this.method("",4);
 
             enum Color {
                 Red = 1, Green = 2, Blue

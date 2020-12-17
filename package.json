@@ -31,6 +31,7 @@
   "homepage": "https://github.com/51breeze/EaseScript#readme",
   "dependencies": {
     "acorn": "^7.3.1",
+    "colors": "^1.4.0",
     "commander": "~2.11.0"
   }
 }
