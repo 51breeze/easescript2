@@ -1,6 +1,6 @@
 package test.com
 {
-    public interface Color {
+    public interface TestInterface {
         get name():string
         set name (val:string):void
         avg():void

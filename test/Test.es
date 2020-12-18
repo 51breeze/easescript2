@@ -1,9 +1,9 @@
-package com.test
+package test
 {
 
     import test.com.TestInterface;
 
-    public class Test extends Object 
+    public class Test extends Object implements TestInterface
     {
 
         private var name123:string="dfdsfsd";
@@ -205,7 +205,7 @@ package com.test
 
             };
 
-            const ls:Class = com.test.Test;
+            const ls:Class = test.Test;
 
            const cs=function(){
 
@@ -318,11 +318,7 @@ package com.test
 
         }
 
-        
-
-        
-
-  
+    
  
     }
   

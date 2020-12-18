@@ -10,7 +10,7 @@
   "scripts": {
     "version": "node ./bin/es.js -V",
     "dev": "node ./bin/es.js",
-    "test": "node ./bin/es.js -f test/TestClass.es"
+    "test": "node ./bin/es.js -f test/Test.es"
   },
   "repository": {
     "type": "git",

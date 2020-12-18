@@ -1,6 +1,6 @@
 package
 {
-    declarator console 
+    declarator Console 
     {
        static log(...args):void;
     }
