@@ -318,6 +318,10 @@ package test
 
         }
 
+        avg(){
+            
+        }
+
     
  
     }
