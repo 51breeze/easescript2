@@ -2,8 +2,9 @@ package test
 {
 
     import test.com.TestInterface;
+    import test.Person;
 
-    public class Test extends Object implements TestInterface
+    public class Test extends Person implements TestInterface
     {
 
         private var name123:string="dfdsfsd";
@@ -23,7 +24,7 @@ package test
 
         private static var iiu:Class = Test;
 
-        constructor( name:string="div" ):Test
+        constructor<T>( name:string="div" ):Test
         {
 
                this.method("",1).substr();
@@ -174,11 +175,12 @@ package test
                  ii:666,
                  Red:1,
                  Green:4,
-                 Blue:6
+                // Blue:6
              }  
 
 
-             var {Red:int = 1, Green = 2, Blue, } = this.method("",4);
+             var {Red:int = 1, Green = 2, Blue, } = bbc
+             //this.method("",4);
 
             enum Color {
                 Red = 1, Green = 2, Blue
@@ -267,7 +269,7 @@ package test
 
             var sss:number = NaN;
 
-            const {name:string="666", ccc=666999} = data;
+            const {name:number=666, ccc=666999} = data;
 
             const [cc,bb=2] = [0];
 
@@ -275,9 +277,9 @@ package test
 
         
         @Router(default="/cc", ppp)
-
-        protected method( name:string="jjjj", age:int)
+        override public method( name:string="jjjj", age:int)
         {
+            super.method(name, age );
 
             var str:string[] = ["a","1"];
             var b:[string, [string,int] ] = ["", ["1",1], "true" ];
@@ -318,7 +320,23 @@ package test
 
         }
 
-        avg(){
+        avg<T extends keyof U>():void{
+
+            var ii = ()=>1;
+
+          //  ii = <T>(name) => name;
+
+            ii = this.method;
+
+            function name<T>(){
+
+            }
+
+            const dd={
+                name<T>(){
+
+                }
+            }
             
         }
 
