@@ -320,11 +320,11 @@ package test
 
         }
 
-        avg<T extends keyof U>():void{
+        avg<T, B>(yy:T):void{
 
             var ii = ()=>1;
 
-          //  ii = <T>(name) => name;
+            ii = <T>(name) => name;
 
             ii = this.method;
 
