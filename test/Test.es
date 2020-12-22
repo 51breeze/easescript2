@@ -4,7 +4,7 @@ package test
     import test.com.TestInterface;
     import test.Person;
 
-    public class Test extends Person implements TestInterface
+    public class Test<U> extends Person implements TestInterface
     {
 
         private var name123:string="dfdsfsd";
@@ -291,6 +291,8 @@ package test
 
             b.push( '1' )
 
+             b.push( ["===",666] )
+
 
 
 
@@ -324,7 +326,11 @@ package test
 
             var ii = ()=>1;
 
+            var bb:[string] = ['1'];
+
             ii = <T>(name) => name;
+
+             <T>(name) => name;
 
             ii = this.method;
 
@@ -333,11 +339,22 @@ package test
             }
 
             const dd={
-                name<T>(){
+                name999<T>(){
 
                 }
             }
             
+        }
+
+        address():string[]{
+
+
+            const dd:int[] = [];
+
+            dd.push( 1 );
+
+            return dd;
+
         }
 
     
