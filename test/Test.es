@@ -337,11 +337,17 @@ package test
             ii = this.method;
 
               
-             
+            
 
-            function name<T>(){
+            function name<T>( i:T ){
+
+                var b:T = 5555;
 
             }
+
+              name( 1 );
+
+           
 
             const dd={
                 name999<T>(){
