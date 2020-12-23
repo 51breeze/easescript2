@@ -39,7 +39,7 @@ package test
 
               Test.iiu.uuName;
 
-             // this.name =  Test.fc()
+              this.name =  Test.fc().uuName;
 
 
            //  this instanceof Test;
@@ -328,11 +328,16 @@ package test
 
             var bb:[string] = ['1'];
 
-            ii = <T>(name) => name;
+            //   ii = <T>(name) => name;
 
-             <T>(name) => name;
+            // <T>(name) => name;
+
+          ii();
 
             ii = this.method;
+
+              
+             
 
             function name<T>(){
 
@@ -346,7 +351,7 @@ package test
             
         }
 
-        address():string[]{
+        address():int[]{
 
 
             const dd:int[] = [];
