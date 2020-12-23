@@ -332,20 +332,21 @@ package test
 
             // <T>(name) => name;
 
-          ii();
+         // ii();
 
-            ii = this.method;
+            //ii = this.method;
 
               
             
 
-            function name<T>( i:T ){
+            function name<T>( i:T ):T{
 
-                var b:T = 5555;
+                var b:T = i;
+                return b;
 
             }
 
-              name( 1 );
+              name<string>( 1 );
 
            
 
