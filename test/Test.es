@@ -346,7 +346,10 @@ package test
 
             }
 
-            const bbb:string = name<string>( "1" );
+            const bbb:string = name<string,int>( "1" ); 
+
+
+            name<string>( "1" ); 
 
         
             const dd={
