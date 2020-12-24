@@ -346,10 +346,9 @@ package test
 
             }
 
-              name<string>( 1 );
+            const bbb:string = name<string>( "1" );
 
-           
-
+        
             const dd={
                 name999<T>(){
 
