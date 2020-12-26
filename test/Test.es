@@ -339,25 +339,41 @@ package test
               
             
 
-            function name<T>( i:T ):T{
+            function name<T,B>( i:T ):T{
 
                 var b:T = i;
                 return b;
 
             }
 
-            const bbb:string = name<string,int>( "1" ); 
+            const bbb:string = name<string,test.Person>( "1" ); 
 
 
-            name<string>( "1" ); 
+            name( "1" ); 
 
+
+
+             const dd = this.map();
         
-            const dd={
-                name999<T>(){
 
+             var ccc:string = dd.name999('1', 999);
+
+
+            
+        }
+
+        map(){
+            const dd:object={
+                name999<T>( b:T ):T{
+                   return b;
                 }
             }
-            
+
+            if( 1 ){
+                return {};
+            }
+
+            return dd;
         }
 
         address():int[]{
