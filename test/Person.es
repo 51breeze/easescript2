@@ -1,9 +1,10 @@
 package test
 {
-    public class Person extends Object
+    import test.com.TestInterface;
+    public class Person extends Object implements TestInterface
     {
 
-        protected method( name:string="jjjj", age:int)
+        public method( name:string="jjjj", age:int)
         {
 
             var str:string[] = ["a","1"];
@@ -32,6 +33,21 @@ package test
             return dd;
 
         }
+
+
+        public get name():string{
+            return '';
+        }
+
+        public set name(val:string){
+
+        }
+
+        avg():void{
+
+        }
+
+
  
     }
   

@@ -4,7 +4,7 @@ package test
     import test.com.TestInterface;
     import test.Person;
 
-    public class Test<U> extends Person implements TestInterface
+    public class Test<U> implements TestInterface
     {
 
         private var name123:string="dfdsfsd";
@@ -277,9 +277,9 @@ package test
 
         
         @Router(default="/cc", ppp)
-        override public method( name:string="jjjj", age:int)
+        public method( name:string="jjjj", age:int)
         {
-            super.method(name, age );
+           // super.method(name, age );
 
             var str:string[] = ["a","1"];
             var b:[string, [string,int] ] = ["", ["1",1], "true" ];
@@ -339,18 +339,27 @@ package test
               
             
 
-            function name<T,B>( i:T ):T{
+            function name<T extends TestInterface,B>( i:T ):T{
 
                 var b:T = i;
+                i.avg();
                 return b;
 
             }
 
-            const bbb:string = name<string,test.Person>( "1" ); 
+           const person = new test.Person();
 
 
-            name( "1" ); 
+           // name<test.Person,test.Person>( person ); 
+            const bbb = name( person ); 
 
+
+           // name( "1" ); 
+
+
+            //type T = {
+                //name<T>():T
+            //}
 
 
              const dd = this.map();
