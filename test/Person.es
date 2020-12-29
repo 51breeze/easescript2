@@ -4,7 +4,7 @@ package test
     public class Person extends Object implements TestInterface
     {
 
-        public method( name:string="jjjj", age:int)
+        public method( name:string, age:int):any
         {
 
             var str:string[] = ["a","1"];

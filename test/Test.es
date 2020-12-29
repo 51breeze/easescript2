@@ -277,7 +277,7 @@ package test
 
         
         @Router(default="/cc", ppp)
-        public method( name:string="jjjj", age:int)
+        public method( name:string, age:int):any
         {
            // super.method(name, age );
 
@@ -322,7 +322,7 @@ package test
 
         }
 
-        avg<T, B>(yy:T):void{
+       avg<T, B>(yy:T):void{
 
             var ii = ()=>1;
 
@@ -339,19 +339,22 @@ package test
               
             
 
-            function name<T extends TestInterface,B>( i:T ):T{
+            function name<T extends Person,B>( i:T ):T{
 
                 var b:T = i;
                 i.avg();
+                i.method('',1);
                 return b;
 
             }
 
            const person = new test.Person();
 
+           //TestInterface
 
-           // name<test.Person,test.Person>( person ); 
-            const bbb = name( person ); 
+
+           // name<TestInterface,test.Person>( person ); 
+            const bbb = name<TestInterface,string>( person ); 
 
 
            // name( "1" ); 
