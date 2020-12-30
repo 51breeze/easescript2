@@ -195,7 +195,7 @@ package test
 
             ddss999 = 'ssss';
 
-            var {ttts:string="456"} = this.method;
+            var {ttts:string} = this.data;
 
           
 
@@ -240,6 +240,10 @@ package test
 
         
 
+        }
+
+        get data(){
+            return {ttts:'1'};
         }
 
 
