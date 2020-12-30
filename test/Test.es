@@ -322,7 +322,7 @@ package test
 
         }
 
-       avg<T, B>(yy:T):void{
+       avg<T extends string, B>(yy:T):void{
 
             var ii = ()=>1;
 

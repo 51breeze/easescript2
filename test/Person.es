@@ -4,6 +4,11 @@ package test
     public class Person extends Object implements TestInterface
     {
 
+        constructor(){
+           super();
+           super.hasOwnProperty("name");
+        }
+
         public method( name:string, age:int):any
         {
 
@@ -43,12 +48,11 @@ package test
 
         }
 
-        avg():void{
+        avg<T extends string,B>():void{
 
         }
 
 
- 
     }
   
     
