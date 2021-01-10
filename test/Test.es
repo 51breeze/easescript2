@@ -18,6 +18,7 @@ package test
         }
 
         static get uuName():string{
+
            
             return '';
         }
@@ -26,6 +27,18 @@ package test
 
         constructor<T>( name:string="div" ):Test
         {
+            
+            let ir=0,br=9;
+            if(ir=5,br=6){
+
+                ir = 6;
+
+            }
+
+   
+           var uiii = 4^6 , btts = 9 | 2
+
+            var hhhh = 9
 
                this.method("",1).substr();
 
@@ -252,13 +265,24 @@ package test
         [Runtime(server)]
         [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
 
-         private ss( ...types:[int,number, ...string ] ){
+         private async ss( ...types:[int,number, ...string ] ){
 
             const dd=(i:int,b:string="123"):int=>{
-                
                 return 5;
-
             };
+
+            if( 1 ){
+                 console.log(3333339999);
+                if( 2 ){
+                    await dd(2);
+                     console.log(333333);
+                     console.log(3333339999);
+                    if( 3 ){
+                        await dd(3);
+                        console.log(333333);
+                    }
+                }
+            }
 
             const data = {"name":123,ccc:666};
 
@@ -276,6 +300,9 @@ package test
             const {name:number=666, ccc=666999} = data;
 
             const [cc,bb=2] = [0];
+
+            var ppppp;
+            return data;
 
         }
 
