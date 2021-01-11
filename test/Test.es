@@ -4,7 +4,7 @@ package test
     import test.com.TestInterface;
     import test.Person;
 
-    public class Test<U> implements TestInterface
+    public class Test<U> /*implements TestInterface*/
     {
 
         private var name123:string="dfdsfsd";
@@ -27,6 +27,8 @@ package test
 
         constructor<T>( name:string="div" ):Test
         {
+
+            /*
             
             let ir=0,br=9;
             if(ir=5,br=6){
@@ -35,7 +37,7 @@ package test
 
             }
 
-   
+
            var uiii = 4^6 , btts = 9 | 2
 
             var hhhh = 9
@@ -251,13 +253,14 @@ package test
 
            this.ss(1, 5, "6");
 
-        
+            */
 
         }
 
+/*
         get data(){
             return {ttts:'1'};
-        }
+        }*/
 
 
  
@@ -282,30 +285,27 @@ package test
                         console.log(333333);
                     }
                 }
+            }else{
+                 await dd(10);
+                 console.log(100000);
             }
 
             const data = {"name":123,ccc:666};
-
             const b = [6,...data,9];
             const bbb = {...data, ...b};
-
             let c = {data};
-
             let bg = {cc():int{
                  return 1;
             }}
-
             var sss:number = NaN;
-
             const {name:number=666, ccc=666999} = data;
-
             const [cc,bb=2] = [0];
-
             var ppppp;
             return data;
 
         }
 
+/*
         
         @Router(default="/cc", ppp)
         public method( name:string, age:int):any
@@ -430,7 +430,7 @@ package test
 
         }
 
-    
+    */
  
     }
   
