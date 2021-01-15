@@ -275,19 +275,22 @@ package test
             };
 
             if( 1 ){
-                 console.log(3333339999);
-                if( 2 ){
-                    await dd(2);
-                     console.log(333333);
-                     console.log(3333339999);
-                    if( 3 ){
-                        await dd(3);
-                        console.log(333333);
-                    }
-                }
+                console.log(111111111);
+                 await dd(111111);
+                 console.log(111111);
+
+                 if(2){
+                       await dd(22222);
+                       console.log(22222222222222);
+                 }
+                 
             }else{
-                 await dd(10);
-                 console.log(100000);
+
+                // await dd(111111111111111);
+                console.log("==33333==");
+                await dd(33333);
+
+                 console.log("==3333333333==");
             }
 
             const data = {"name":123,ccc:666};
