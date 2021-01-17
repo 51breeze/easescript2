@@ -280,15 +280,25 @@ package test
                  console.log(111111);
 
                  if(2){
-                       await dd(22222);
+                      // await dd(22222);
                        console.log(22222222222222);
+                 }else{
+                     console.log("====222222222222=====")
+                     await dd(2222299999999999999999999);
+                 }
+                 console.log(222)
+
+                 switch( 1 ){
+                     case 1 :
+                         await dd(66666666666666666666);
+                         console.log("66666666666666666666")
                  }
                  
             }else{
 
-                // await dd(111111111111111);
-                console.log("==33333==");
-                await dd(33333);
+                 await dd(3333333333333333333333333333);
+               /* console.log("==33333==");
+                await dd(33333);*/
 
                  console.log("==3333333333==");
             }
