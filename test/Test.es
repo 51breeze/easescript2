@@ -279,6 +279,7 @@ package test
                  await dd(111111);
                  console.log(111111);
 
+
                  if(2){
                       // await dd(22222);
                        console.log(22222222222222);
@@ -292,13 +293,20 @@ package test
                      case 1 :
                          await dd(66666666666666666666);
                          console.log("66666666666666666666")
+                         break;
+                    case 2 :
+                         await dd(77777777777);
+                         console.log("777777777777777")
+                         break;
                  }
+
+                  console.log(3333)
                  
             }else{
 
                  await dd(3333333333333333333333333333);
-               /* console.log("==33333==");
-                await dd(33333);*/
+                console.log("==33333==");
+                await dd(33333);
 
                  console.log("==3333333333==");
             }
