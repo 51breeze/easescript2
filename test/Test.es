@@ -276,52 +276,58 @@ package test
 
             if( 1 ){
                 console.log(111111111);
-                 await dd(111111);
+                 //await dd(111111);
                  console.log(111111);
 
+                if( 2 ){
+                      await dd(222222222);
+                      console.log(2222222222);
 
-                 if(2){
-                      // await dd(22222);
-                       console.log(22222222222222);
-                 }else{
-                     console.log("====222222222222=====")
-                     await dd(2222299999999999999999999);
-                 }
-                 console.log(222)
+                    if( 88888 ){
+                      await dd(222222222);
+                      console.log(2222222222);
+                    }
 
-                 switch( 1 ){
-                     case 1 :
-                         await dd(66666666666666666666);
-                         console.log("66666666666666666666")
-                         break;
-                    case 2 :
-                         await dd(77777777777);
-                         console.log("777777777777777")
-                         break;
-                 }
+                       
 
-                  console.log(3333)
-                 
-            }else{
+                }else{
 
-                 await dd(3333333333333333333333333333);
-                console.log("==33333==");
-                await dd(33333);
+                    console.log("=====222222222222222222222========")
+                    //await dd(222222222);
+                    if( 2222 ){
+                      await dd(222222222333333333333333);
+                      console.log(2222222222333333333333333);
+                    }
 
+                }
+                console.log("=====999999999999999====99999999999999999====")
+
+                switch( 777 ){
+                   case 777 :
+                      await dd(77777777777777777777777777);
+                      break;
+                   case 88899 :
+                      await dd(777777777788999997777777777777777);
+                      if( 8999 ){
+                          await dd(77777777999999999999999999997777777777777);
+                      }
+                      console.log("====444====")
+                      break;
+
+                }
+                 console.log("=====777777777=============77777777777777====")
+
+
+            }
+            else{
                  console.log("==3333333333==");
+                   await dd(3333333333);
+                   await dd(3333333333);
+                 console.log(3333333333);
             }
 
             const data = {"name":123,ccc:666};
-            const b = [6,...data,9];
-            const bbb = {...data, ...b};
-            let c = {data};
-            let bg = {cc():int{
-                 return 1;
-            }}
-            var sss:number = NaN;
-            const {name:number=666, ccc=666999} = data;
-            const [cc,bb=2] = [0];
-            var ppppp;
+
             return data;
 
         }
