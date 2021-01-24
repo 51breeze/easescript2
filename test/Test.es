@@ -28,7 +28,7 @@ package test
         constructor<T>( name:string="div" ):Test
         {
 
-            /*
+            
             
             let ir=0,br=9;
             if(ir=5,br=6){
@@ -111,11 +111,12 @@ package test
 
                
                   var whenss = "ok";
-                  //var i = 2;
+                  i = 2;
+                  var y000 = 999999;
             
                 when( Syntax(php) ){
 
-                    //var i = 1;
+                    y000 = 877777777;
                     
                 }then{
                     //var i = 5;
@@ -124,9 +125,13 @@ package test
             
              }then{
             
-               // var i = 5;
+                 var y000 = 88888888888888888888;
                  
              }
+
+            
+
+
 
              try{
 
@@ -253,14 +258,14 @@ package test
 
            this.ss(1, 5, "6");
 
-            */
+            
 
         }
 
-/*
+
         get data(){
             return {ttts:'1'};
-        }*/
+        }
 
 
  
@@ -298,6 +303,7 @@ package test
                       await dd(222222222333333333333333);
                       console.log(2222222222333333333333333);
                     }
+                    console.log("=====222222222222222222222==99999======")
 
                 }
                 console.log("=====999999999999999====99999999999999999====")
@@ -332,7 +338,7 @@ package test
 
         }
 
-/*
+
         
         @Router(default="/cc", ppp)
         public method( name:string, age:int):any
@@ -457,7 +463,7 @@ package test
 
         }
 
-    */
+    
  
     }
   
