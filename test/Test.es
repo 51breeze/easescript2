@@ -161,7 +161,7 @@ package test
              switch( name ){
 
                  case "o" : 
-                     //this.mo();
+                     console.log( 99999999999 );
                  break;
 
                  default :
@@ -278,6 +278,16 @@ package test
          private async ss( ...types:[int,number, ...string ] ){
 
             const dd=(i:int,b:string="123"):int=>{
+                console.log(i,b)
+                if( 66 ){
+                    console.log(i,b)
+                     if( 66 ){
+                        console.log(i,b) 
+                        if( 66 ){
+                            console.log(i,b)
+                        }
+                    }
+                }
                 return 5;
             };
 
@@ -310,6 +320,11 @@ package test
                 }
                 console.log("=====999999999999999====99999999999999999====")
 
+
+                if(22){
+                    console.log("====++++++++++++++++++2222======")
+                }
+
                 switch( 777 ){
                    case 777 :
                       await dd(77777777777777777777777777);
@@ -317,12 +332,18 @@ package test
                    case 88899 :
                       //await dd(777777777788999997777777777777777);
                       if( 8999 ){
-                          //await dd(77777777999999999999999999997777777777777);
+                         // await dd(77777777999999999999999999997777777777777);
                       }else{
-                            console.log("====444= 5555===")
+                            console.log("====444= 5555===");
+                            if( 566){
+                                 console.log("====444= 5555===");
+                                 if( 566){
+                                     console.log("====444= 5555===");
+                                 }
+                            }
                       }
                       console.log("====444====")
-                      //break;
+                      break;
 
                 }
                  console.log("=====777777777=============77777777777777====")
