@@ -4,10 +4,10 @@ package test
     import test.com.TestInterface;
     import test.Person;
 
-    public class Test<U> /*implements TestInterface*/
+    public class Test<U> implements TestInterface
     {
 
-        private var name123:string="dfdsfsd";
+        public var name123:string="dfdsfsd";
 
         public static const age:int=50
 
