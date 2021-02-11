@@ -59,9 +59,9 @@ package test
               this.name =  Test.fc().uuName;
 
 
-           //  this instanceof Test;
+             this instanceof Test;
 
-               this is Test;
+               this is TestInterface;
 
 
               var iiss:string = true as string;
@@ -258,13 +258,17 @@ package test
            Number.isNaN(1);
            Number(1).valueOf()
 
-           this.ss(1, 5, "6");
+          console.log(  this.data  );
+          this.ss(1, 5, "6");
+
+          this.data;
 
             
 
         }
 
 
+        [Runtime(client)]
         get data(){
             return {ttts:'1'};
         }
@@ -272,7 +276,7 @@ package test
 
  
 
-        [Runtime(server)]
+        [Runtime(client)]
         [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
 
          private async ss( ...types:[int,number, ...string ] ){
