@@ -1,12 +1,14 @@
 package test
 {
     import test.com.TestInterface;
+    import test.Test;
     public class Person extends Object implements TestInterface
     {
 
         constructor(){
            super();
            super.hasOwnProperty("name");
+           console.log( this is Test )
         }
 
         public method( name:string, age:int):any

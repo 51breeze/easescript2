@@ -51,10 +51,12 @@ global.__generator = function (thisArg, body) {
 	});
 })(global);
 (function(global){
+	const Test = global.getClass(1);
 	var private=Symbol("private");
 	function Person(){
 		Object.prototype.constructor.call(this);
 		Object.prototype.hasOwnProperty.call(this,"name");
+		console.log(this instanceof Test);
 	}
 	Object.definProperty(Person,"prototype",{value:Object.create(Object.prototype)});
 	Object.definProperty(Person.prototype,"constructor",{value:Person});
@@ -76,12 +78,13 @@ global.__generator = function (thisArg, body) {
 	Object.definProperty(Person.prototype, "avg", {value:function avg(){
 
 	}});
-	global.setClass(1,Person,{
+	global.setClass(2,Person,{
 		"private":private
 	});
 })(global);
 (function(global){
 	const TestInterface = global.getClass(0);
+	const Person = global.getClass(2);
 	var private=Symbol("private");
 	function Test(name){
 		name = name === void 0 ? "div" : name;
@@ -183,7 +186,7 @@ global.__generator = function (thisArg, body) {
 		this.data;
 		this[private]={"name123":"dfdsfsd"};
 	}
-	Object.definProperty(Test,"prototype",{value:Object.create(Object.prototype)});
+	Object.definProperty(Test,"prototype",{value:Object.create(Person.prototype)});
 	Object.definProperty(Test.prototype,"constructor",{value:Test});
 	Object.definProperty(Test, "age", {value:50});
 	Object.definProperty(Test, "fc", {value:function fc(){
@@ -197,10 +200,10 @@ global.__generator = function (thisArg, body) {
 	set:null});
 	Object.definProperty(Test, "iiu", {value:Test});
 	Object.definProperty(Test.prototype, "name123",{
-	get:function getname123(){
+	get:function getName123(){
 		return this[private].name123;
 	},
-	set:function setname123(value){
+	set:function setName123(value){
 		this[private].name123=value;
 	}});
 	Object.definProperty(Test.prototype, "data",{
@@ -355,8 +358,8 @@ global.__generator = function (thisArg, body) {
 		dd.push(1);
 		return dd;
 	}});
-	global.setClass(2,Test,{
+	global.setClass(1,Test,{
 		"private":private,
-		"imps":[TestInterface]
+		"inherit":Person
 	});
 })(global);

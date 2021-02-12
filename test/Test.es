@@ -4,7 +4,7 @@ package test
     import test.com.TestInterface;
     import test.Person;
 
-    public class Test<U> implements TestInterface
+    public class Test<U> extends Person
     {
 
         public var name123:string="dfdsfsd";
@@ -370,7 +370,7 @@ package test
 
         
         @Router(default="/cc", ppp)
-        public method( name:string, age:int):any
+        override public method( name:string, age:int):any
         {
            // super.method(name, age );
 
@@ -404,18 +404,18 @@ package test
         }
 
 
-        public get name():string{
+        override public get name():string{
        
 
             return "1";
 
         }
 
-        public set name( value:string ){
+        override public set name( value:string ){
 
         }
 
-       avg<T extends string, B>(yy:T):void{
+       override avg<T extends string, B>(yy:T):void{
 
             var ii = ()=>1;
 
