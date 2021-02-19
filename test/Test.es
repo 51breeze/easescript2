@@ -177,7 +177,7 @@ package test
 
              }
 
-             for( var value of this){
+             for( var value of []){
 
              }
 
