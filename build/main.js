@@ -55,13 +55,11 @@ global.__generator = function (thisArg, body) {
 (function(global){
 	function TestInterface(){}
 	Object.defineProperty(TestInterface.prototype,"constructor",{value:TestInterface});
-	global.setClass(0,TestInterface,{
-
-	});
+	global.setClass(0,TestInterface,{});
 })(global);
 (function(global){
-	const Test = global.getClass(1);
 	var private=Symbol("private");
+	const Test = global.getClass(1);
 	function Person(){
 		Object.prototype.constructor.call(this);
 		Object.prototype.hasOwnProperty.call(this,"name");
@@ -69,22 +67,26 @@ global.__generator = function (thisArg, body) {
 	}
 	Object.defineProperty(Person,"prototype",{value:Object.create(Object.prototype)});
 	Object.defineProperty(Person.prototype,"constructor",{value:Person});
-	Object.defineProperty(Person.prototype, "method", {value:function method(name,age){
+	Object.defineProperty(Person.prototype,"method",{value:function method(name,age){
 		var str = ["a","1"];
 		var b = ["",["1",1],"true"];
 		var cc = [1];
 		var x = [1,1,'2222',{}];
 		b.push('1');
+		Person.prototype.address.call(this);
 		return "sssss";
 	}});
-	Object.defineProperty(Person.prototype, "name",{
+	Object.defineProperty(Person.prototype,"name",{
 	get:function name(){
 		return '';
 	},
 	set:function name(val){
 
 	}});
-	Object.defineProperty(Person.prototype, "avg", {value:function avg(){
+	Object.defineProperty(Person.prototype,"avg",{value:function avg(){
+
+	}});
+	Object.defineProperty(Person.prototype,"address",{value:function address(){
 
 	}});
 	global.setClass(2,Person,{
@@ -92,9 +94,9 @@ global.__generator = function (thisArg, body) {
 	});
 })(global);
 (function(global){
+	var private=Symbol("private");
 	const TestInterface = global.getClass(0);
 	const Person = global.getClass(2);
-	var private=Symbol("private");
 	function Test(name){
 		name = name === void 0 ? "div" : name;
 		var $this1 = this;
@@ -141,7 +143,9 @@ global.__generator = function (thisArg, body) {
 		if(1){
 			i=5;
 		}
-		while(1);
+		while(1){
+
+		}
 		do{
 
 		}while(1);
@@ -193,32 +197,32 @@ global.__generator = function (thisArg, body) {
 		console.log(this.data);
 		this.ss(1,5,"6");
 		this.data;
-		this[private]={"name123":"dfdsfsd"};
+		Object.defineProperty(this,private,{value:{"name123":"dfdsfsd"}});
 	}
 	Object.defineProperty(Test,"prototype",{value:Object.create(Person.prototype)});
 	Object.defineProperty(Test.prototype,"constructor",{value:Test});
-	Object.defineProperty(Test, "age", {value:50});
-	Object.defineProperty(Test, "fc", {value:function fc(){
+	Object.defineProperty(Test,"age",{value:50});
+	Object.defineProperty(Test,"fc",{value:function fc(){
 		var dd = Test;
 		return dd;
 	}});
-	Object.defineProperty(Test, "uuName",{
+	Object.defineProperty(Test,"uuName",{
 	get:function uuName(){
-		return '';
+		return 'sssssss';
 	}});
-	Object.defineProperty(Test, "iiu", {value:Test});
-	Object.defineProperty(Test.prototype, "name123",{
+	Object.defineProperty(Test,"iiu",{value:Test});
+	Object.defineProperty(Test.prototype,"name123",{
 	get:function getName123(){
 		return this[private].name123;
 	},
 	set:function setName123(value){
 		this[private].name123=value;
 	}});
-	Object.defineProperty(Test.prototype, "data",{
+	Object.defineProperty(Test.prototype,"data",{
 	get:function data(){
 		return {"ttts":'1'};
 	}});
-	Object.defineProperty(Test.prototype, "ss", {value:function ss(){
+	Object.defineProperty(Test.prototype,"ss",{value:function ss(){
 		var types = Array.prototype.slice.call(arguments,0);
 		return global.__awaiter(this, void 0, void 0, function (){
 			var dd;
@@ -319,7 +323,7 @@ global.__generator = function (thisArg, body) {
 			});
 		});
 	}});
-	Object.defineProperty(Test.prototype, "method", {value:function method(name,age){
+	Object.defineProperty(Test.prototype,"method",{value:function method(name,age){
 		var str = ["a","1"];
 		var b = ["",["1",1],"true"];
 		var cc = [1];
@@ -328,14 +332,14 @@ global.__generator = function (thisArg, body) {
 		b.push(["===",666]);
 		return "sssss";
 	}});
-	Object.defineProperty(Test.prototype, "name",{
+	Object.defineProperty(Test.prototype,"name",{
 	get:function name(){
 		return "1";
 	},
 	set:function name(value){
 
 	}});
-	Object.defineProperty(Test.prototype, "avg", {value:function avg(yy){
+	Object.defineProperty(Test.prototype,"avg",{value:function avg(yy){
 		var ii = function(){
 			return 1;
 		};
@@ -351,16 +355,17 @@ global.__generator = function (thisArg, body) {
 		const dd = this.map();
 		var ccc = dd.name999('1',999);
 	}});
-	Object.defineProperty(Test.prototype, "map", {value:function map(){
+	Object.defineProperty(Test.prototype,"map",{value:function map(){
 		const dd = {"name999":function(b){
 			return b;
 		}};
 		if(1){
 			return {};
 		}
+		this.address();
 		return dd;
 	}});
-	Object.defineProperty(Test.prototype, "address", {value:function address(){
+	Object.defineProperty(Test.prototype,"address",{value:function address(){
 		const dd = [];
 		dd.push(1);
 		return dd;

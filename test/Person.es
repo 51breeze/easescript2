@@ -25,7 +25,7 @@ package test
             b.push( '1' )
 
 
-
+ this.address();
 
             return "sssss";
 
@@ -36,6 +36,9 @@ package test
 
           
           var dd = { Red:1 };
+
+
+            
 
             return dd;
 
@@ -52,6 +55,10 @@ package test
 
         avg<T extends string,B>():void{
 
+        }
+
+        private address(){
+            
         }
 
 

@@ -20,25 +20,19 @@ package test
         static get uuName():string{
 
            
-            return '';
+            return 'sssssss';
         }
 
         private static var iiu:Class = Test;
 
         constructor<T>( name:string="div" ):Test
         {
-
-            
-            
             let ir=0,br=9;
             if(ir=5,br=6){
 
                 ir = 6;
 
             }
-
-            
-
 
            var uiii = 4^6 , btts = 9 | 2
 
@@ -477,11 +471,12 @@ package test
             if( 1 ){
                 return {};
             }
+            this.address();
 
             return dd;
         }
 
-        address():int[]{
+        private address():int[]{
 
 
             const dd:int[] = [];
