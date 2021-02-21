@@ -3,6 +3,7 @@ package test
 
     import test.com.TestInterface;
     import test.Person;
+    import test.com.Persons;
 
     public class Test<U> extends Person
     {
@@ -27,12 +28,22 @@ package test
 
         constructor<T>( name:string="div" ):Test
         {
+
+            super(name);
+            console.log( this instanceof Person);
+            console.log( this is Person);
+            console.log( this instanceof TestInterface);
+            console.log( this is TestInterface);
+            
             let ir=0,br=9;
             if(ir=5,br=6){
 
                 ir = 6;
 
             }
+
+
+
 
            var uiii = 4^6 , btts = 9 | 2
 
@@ -144,13 +155,7 @@ package test
                   i = 5;
              }
 
-             while( 1 ){
-
-             }
-
-             do{
-
-             }while(1)
+           
 
              switch( name ){
 
@@ -257,6 +262,13 @@ package test
 
           this.data;
 
+          var bname = "data123";
+          if( 1 ){
+             bname = "data1236666";
+          }
+
+          this[bname];
+
             
 
         }
@@ -266,9 +278,6 @@ package test
         get data(){
             return {ttts:'1'};
         }
-
-
- 
 
         [Runtime(client)]
         [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
@@ -400,6 +409,7 @@ package test
 
         override public get name():string{
        
+             super.name;
 
             return "1";
 
@@ -480,8 +490,11 @@ package test
 
 
             const dd:int[] = [];
+           const bb = {global:1,private:1};
+
 
             dd.push( 1 );
+
 
             return dd;
 

@@ -11,6 +11,10 @@ package test
            console.log( this is Test )
         }
 
+        get target(){
+            return this;
+        }
+
         public method( name:string, age:int):any
         {
 
@@ -25,7 +29,7 @@ package test
             b.push( '1' )
 
 
- this.address();
+            this.target.address(6);
 
             return "sssss";
 

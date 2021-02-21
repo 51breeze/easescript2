@@ -19,6 +19,8 @@ const config = [
 ];
 const options = {};
 config.forEach( name=>{
-    options[name] = program[name] || null;
+    if( program[name] ){
+       options[name] = program[name];
+    }
 });
 Compiler.start(options);

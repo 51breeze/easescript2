@@ -1,31 +1,55 @@
-var global={modules:[]};
-global.__KEY__=Symbol("__GLOBAL__");
-global.getClass=function(id){
-    return global.modules[id] || (global.modules[id]={});
+function System(){};
+System.__modules__=[];
+System.__KEY__=Symbol("System");
+System.getClass=function(id){
+    return System.__modules__[id];
 }
-global.setClass=function(id,classObject,description){
-    Object.defineProperty(classObject,global.__KEY__,description);
-    global.modules[id] = classObject;
+System.setClass=function(id,classObject,description){
+    if( description ){
+        if( description.inherit ){
+            Object.defineProperty(classObject,"prototype",{value:Object.create(description.inherit.prototype)});
+        }
+        if( description.methods ){
+            Object.defineProperties(classObject,description.methods);
+        }
+        if( description.members ){
+            Object.defineProperties(classObject.prototype,description.members);
+        }
+        Object.defineProperty(classObject,System.__KEY__,{value:description});
+        Object.defineProperty(classObject,"name",{value:description.name});
+    }
+    Object.defineProperty(classObject.prototype,"constructor",{value:classObject});
+    System.__modules__[id] = classObject;
 }
-var System = {};
 System.toArray=function toArray(object){
     var arr = [];
     for(var key in object)arr.push(object[key]);
     return arr;
 }
-System.is=function is(){
-
+System.is=function is(left,right){
+    if(!left || !right || typeof left !== "object")return false;
+    var rId = right[System.__KEY__] ? right[System.__KEY__].id : null;
+    var description =  left.constructor ? left.constructor[System.__KEY__] : null;
+    if( rId === 0 && description && description.id === 1 ){
+        return (function check(description,id){
+            if( !description )return false;
+            var imps = description.imps;
+            var inherit = description.inherit;
+            if( inherit === right )return true;
+            if( imps ){
+                for(var i=0;i<imps.length;i++){
+                    if( imps[i] === right || check( imps[i][System.__KEY__], 0 ) )return true;
+                }
+            }
+            if( inherit && inherit[ System.__KEY__ ].id === id){
+                return check( inherit[System.__KEY__], 0);
+            }
+            return false;
+        })(description,1);
+    }
+    return left instanceof right;
 }
-global.__awaiter = function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-global.__generator = function (thisArg, body) {
+System.generator = function (thisArg, body) {
     var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
     return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
@@ -52,54 +76,94 @@ global.__generator = function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function(global){
+System.awaiter = function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+const delayClass=[];;
+(function(System){
 	function TestInterface(){}
-	Object.defineProperty(TestInterface.prototype,"constructor",{value:TestInterface});
-	global.setClass(0,TestInterface,{});
-})(global);
-(function(global){
-	var private=Symbol("private");
-	const Test = global.getClass(1);
+	System.setClass(0,TestInterface,{
+		id:0,
+		ns:0,
+		name:"test.com.TestInterface"
+	});
+})(System);
+(function(System){
+	const private=Symbol("private");
+	const TestInterface = System.getClass(0);
+	var Test = null;
 	function Person(){
-		Object.prototype.constructor.call(this);
+		Object.call(this);
 		Object.prototype.hasOwnProperty.call(this,"name");
-		console.log(this instanceof Test);
+		console.log(this instanceof Test,"===================");
 	}
-	Object.defineProperty(Person,"prototype",{value:Object.create(Object.prototype)});
-	Object.defineProperty(Person.prototype,"constructor",{value:Person});
-	Object.defineProperty(Person.prototype,"method",{value:function method(name,age){
+	const members = {};
+	members.target={m:2,d:1,get:function target(){
+		return this;
+	}};
+	members.method={m:2,d:1,value:function method(name,age){
 		var str = ["a","1"];
 		var b = ["",["1",1],"true"];
 		var cc = [1];
 		var x = [1,1,'2222',{}];
 		b.push('1');
-		Person.prototype.address.call(this);
+		Person.prototype.address.call(this.target,6);
 		return "sssss";
-	}});
-	Object.defineProperty(Person.prototype,"name",{
-	get:function name(){
+	}};
+	members.name={m:2,d:1,get:function name(){
 		return '';
-	},
-	set:function name(val){
+	},set:function name(val){
 
-	}});
-	Object.defineProperty(Person.prototype,"avg",{value:function avg(){
+	}};
+	members.avg={m:2,d:1,value:function avg(){
 
-	}});
-	Object.defineProperty(Person.prototype,"address",{value:function address(){
+	}};
+	members.address={m:0,d:1,value:function address(){
 
-	}});
-	global.setClass(2,Person,{
-		"private":private
+	}};
+	delayClass.push(function(){
+		Test = System.getClass(1);
 	});
-})(global);
-(function(global){
-	var private=Symbol("private");
-	const TestInterface = global.getClass(0);
-	const Person = global.getClass(2);
+	System.setClass(2,Person,{
+		id:1,
+		ns:1,
+		name:"test.Person",
+		private:private,
+		imps:[TestInterface],
+		members:members
+	});
+})(System);
+(function(System){
+	const private=Symbol("private");
+	function Persons(){
+		this.hasOwnProperty("name");
+	}
+	System.setClass(3,Persons,{
+		id:1,
+		ns:0,
+		name:"test.com.Persons",
+		private:private
+	});
+})(System);
+(function(System){
+	const private=Symbol("private");
+	const TestInterface = System.getClass(0);
+	const Person = System.getClass(2);
 	function Test(name){
+		Object.defineProperty(this,private,{value:{"name123":"dfdsfsd"}});
 		name = name === void 0 ? "div" : name;
 		var $this1 = this;
+		Person.call(this,name);
+		console.log(this instanceof Person);
+		console.log(this instanceof Person);
+		console.log(this instanceof TestInterface);
+		console.log(System.is(this,TestInterface));
 		let ir = 0,br = 9;
 		if(ir=5,br=6){
 			ir=6;
@@ -143,12 +207,6 @@ global.__generator = function (thisArg, body) {
 		if(1){
 			i=5;
 		}
-		while(1){
-
-		}
-		do{
-
-		}while(1);
 		switch(name){
 			case "o" :
 				console.log(99999999999);
@@ -197,37 +255,37 @@ global.__generator = function (thisArg, body) {
 		console.log(this.data);
 		this.ss(1,5,"6");
 		this.data;
-		Object.defineProperty(this,private,{value:{"name123":"dfdsfsd"}});
+		var bname = "data123";
+		if(1){
+			bname="data1236666";
+		}
+		this[bname];
 	}
-	Object.defineProperty(Test,"prototype",{value:Object.create(Person.prototype)});
-	Object.defineProperty(Test.prototype,"constructor",{value:Test});
-	Object.defineProperty(Test,"age",{value:50});
-	Object.defineProperty(Test,"fc",{value:function fc(){
+	const methods = {};
+	methods.age={m:2,d:0,value:50};
+	methods.fc={m:2,d:1,value:function fc(){
 		var dd = Test;
 		return dd;
-	}});
-	Object.defineProperty(Test,"uuName",{
-	get:function uuName(){
+	}};
+	methods.uuName={m:2,d:1,get:function uuName(){
 		return 'sssssss';
-	}});
-	Object.defineProperty(Test,"iiu",{value:Test});
-	Object.defineProperty(Test.prototype,"name123",{
-	get:function getName123(){
+	}};
+	methods.iiu={m:0,d:0,value:Test};
+	const members = {};
+	members.name123={m:2,d:0,get:function getName123(){
 		return this[private].name123;
-	},
-	set:function setName123(value){
+	},set:function setName123(value){
 		this[private].name123=value;
-	}});
-	Object.defineProperty(Test.prototype,"data",{
-	get:function data(){
+	}};
+	members.data={m:2,d:1,get:function data(){
 		return {"ttts":'1'};
-	}});
-	Object.defineProperty(Test.prototype,"ss",{value:function ss(){
+	}};
+	members.ss={m:0,d:1,value:function ss(){
 		var types = Array.prototype.slice.call(arguments,0);
-		return global.__awaiter(this, void 0, void 0, function (){
+		return System.awaiter(this, void 0, void 0, function (){
 			var dd;
 			var data;
-			return global.__generator(this, function ($a) {
+			return System.generator(this, function ($a) {
 				switch ($a.label){
 					case 0 :
 						dd = function(i,b){
@@ -322,8 +380,8 @@ global.__generator = function (thisArg, body) {
 				}
 			});
 		});
-	}});
-	Object.defineProperty(Test.prototype,"method",{value:function method(name,age){
+	}};
+	members.method={m:2,d:1,value:function method(name,age){
 		var str = ["a","1"];
 		var b = ["",["1",1],"true"];
 		var cc = [1];
@@ -331,15 +389,14 @@ global.__generator = function (thisArg, body) {
 		b.push('1');
 		b.push(["===",666]);
 		return "sssss";
-	}});
-	Object.defineProperty(Test.prototype,"name",{
-	get:function name(){
+	}};
+	members.name={m:2,d:1,get:function name(){
+		Person.prototype.name;
 		return "1";
-	},
-	set:function name(value){
+	},set:function name(value){
 
-	}});
-	Object.defineProperty(Test.prototype,"avg",{value:function avg(yy){
+	}};
+	members.avg={m:2,d:1,value:function avg(yy){
 		var ii = function(){
 			return 1;
 		};
@@ -354,8 +411,8 @@ global.__generator = function (thisArg, body) {
 		const bbb = name(person);
 		const dd = this.map();
 		var ccc = dd.name999('1',999);
-	}});
-	Object.defineProperty(Test.prototype,"map",{value:function map(){
+	}};
+	members.map={m:2,d:1,value:function map(){
 		const dd = {"name999":function(b){
 			return b;
 		}};
@@ -364,14 +421,27 @@ global.__generator = function (thisArg, body) {
 		}
 		this.address();
 		return dd;
-	}});
-	Object.defineProperty(Test.prototype,"address",{value:function address(){
+	}};
+	members.address={m:0,d:1,value:function address(){
 		const dd = [];
+		const bb = {"global":1,"private":1};
 		dd.push(1);
 		return dd;
-	}});
-	global.setClass(1,Test,{
-		"private":private,
-		"inherit":Person
+	}};
+	System.setClass(1,Test,{
+		id:1,
+		ns:1,
+		name:"test.Test",
+		private:private,
+		inherit:Person,
+		methods:methods,
+		members:members
 	});
-})(global);
+})(System);
+(function(queues,load){while(load=queues.pop())load();})(delayClass);
+
+
+
+const Test = System.getClass(1)
+
+new Test
