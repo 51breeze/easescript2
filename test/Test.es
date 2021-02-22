@@ -465,7 +465,10 @@ package test
              const dd = this.map();
         
 
-             var ccc:string = dd.name999('1', 999);
+             var ccc:string = dd.name999<string,string>('1', '999');
+             var cccww:int = dd.name999<int,int>(999,666);
+
+             ccc.substr(0);
 
 
             
@@ -473,7 +476,7 @@ package test
 
         map(){
             const dd:object={
-                name999<T>( b:T ):T{
+                name999<T,B>(c, b:T ):T{
                    return b;
                 }
             }
