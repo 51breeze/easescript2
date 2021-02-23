@@ -101,7 +101,7 @@ const delayClass=[];;
 	function Person(){
 		Object.call(this);
 		Object.prototype.hasOwnProperty.call(this,"name");
-		console.log(this instanceof Test,"===================");
+		console.log(this instanceof Test);
 	}
 	const members = {};
 	members.target={m:2,d:1,get:function target(){
@@ -168,6 +168,7 @@ const delayClass=[];;
 		if(ir=5,br=6){
 			ir=6;
 		}
+		new Array();
 		var uiii = 4 ^ 6,btts = 9 | 2;
 		var hhhh = 9;
 		this.method("",1).substr();
@@ -218,7 +219,8 @@ const delayClass=[];;
 		}
 		for(var names in this){
 		}
-		for(var value of []){
+		var bccc = [];
+		for(var value of bccc){
 		}
 		var b = 1;
 		this.method < b;
@@ -231,8 +233,6 @@ const delayClass=[];;
 		var ddss=dd || "456";
 		var ddss999=arr[0] || "456",ioo=arr[1];
 		ddss999='ssss';
-		var $data = this.data;
-		var ttts=$data["ttts"];
 		const ddc = function(i,b){
 			b = b === void 0 ? "123" : b;
 			return 5;
@@ -277,8 +277,21 @@ const delayClass=[];;
 	},set:function setName123(value){
 		this[private].name123=value;
 	}};
+	members.iuuu={m:2,d:1,get:function iuuu(){
+		var ii = this.name123;
+		if(6){
+			ii=[];
+		}
+		ii=true;
+		return ii;
+	}};
 	members.data={m:2,d:1,get:function data(){
-		return {"ttts":'1'};
+		var b = [];
+		if(4){
+			b=this.avg;
+		}
+		b=this.iuuu;
+		return b;
 	}};
 	members.ss={m:0,d:1,value:function ss(){
 		var types = Array.prototype.slice.call(arguments,0);
@@ -410,10 +423,12 @@ const delayClass=[];;
 		const person = new Person();
 		const bbb = name(person);
 		const dd = this.map();
-		var ccc = dd.name999('1',999);
+		var ccc = dd.name999('1','999');
+		var cccww = dd.name999(999,666);
+		ccc.substr(0);
 	}};
 	members.map={m:2,d:1,value:function map(){
-		const dd = {"name999":function(b){
+		const dd = {"name999":function(c,b){
 			return b;
 		}};
 		if(1){
@@ -439,9 +454,3 @@ const delayClass=[];;
 	});
 })(System);
 (function(queues,load){while(load=queues.pop())load();})(delayClass);
-
-
-
-const Test = System.getClass(1)
-
-new Test

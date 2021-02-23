@@ -1,6 +1,6 @@
 package
 {
-    declarator Array 
+    declarator Array implements Iterator
     {
        static public from(target:Iterator,callback:Function=null):Array;
        static public isArray(target:any):Boolean;

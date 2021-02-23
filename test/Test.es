@@ -42,6 +42,8 @@ package test
 
             }
 
+            new Array();
+
 
 
 
@@ -176,7 +178,10 @@ package test
 
              }
 
-             for( var value of []){
+             var bccc:any = [];
+             //bccc= this.data;
+
+             for( var value of bccc){
 
              }
 
@@ -216,9 +221,8 @@ package test
 
             ddss999 = 'ssss';
 
-            var {ttts:string} = this.data;
+           // var {ttts:string} = this.data;
 
-          
 
             const ddc=(i:int,b:string="123"):int=>{
 
@@ -273,10 +277,28 @@ package test
 
         }
 
+        get iuuu(){
+            var ii:any = this.name123;
+            if( 6 ){
+                ii =[]
+            }
+            ii = true;
+            return ii;
+        }
+
 
         [Runtime(client)]
         get data(){
-            return {ttts:'1'};
+            var b:any = [];
+
+            if( 4 ){
+                b = this.avg;
+            }
+
+            b = this.iuuu;
+
+            //b={}
+            return b;
         }
 
         [Runtime(client)]
@@ -365,7 +387,6 @@ package test
             }
 
             const data = {"name":123,ccc:666};
-
             return data;
 
         }

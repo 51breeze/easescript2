@@ -1,6 +1,6 @@
 package
 {
-    declarator String 
+    declarator String implements Iterator
     {
        constructor( value );
        get length():uint;
