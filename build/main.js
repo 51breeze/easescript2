@@ -26,6 +26,26 @@ System.toArray=function toArray(object){
     for(var key in object)arr.push(object[key]);
     return arr;
 }
+System.getIterator=function getIterator(object){
+    if( object[Symbol.iterator] ){
+        return object[Symbol.iterator]();
+    }
+    var type = typeof object;
+    if( type==="object" || type ==="boolean" || type ==="number" || object.length === void 0 ){
+        throw new TypeError("is not iterator object");
+    }
+    return (function(object){ 
+        return{
+            index:0,
+            next:function next(){
+                if (this.index < object.length) {
+                    return {value:object[this.index++],done:false};
+                }
+                return {value:undefined,done:true};
+            }
+        };
+    })(object);
+}
 System.is=function is(left,right){
     if(!left || !right || typeof left !== "object")return false;
     var rId = right[System.__KEY__] ? right[System.__KEY__].id : null;
@@ -84,8 +104,7 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-const delayClass=[];;
+};;
 (function(System){
 	function TestInterface(){}
 	System.setClass(0,TestInterface,{
@@ -97,12 +116,7 @@ const delayClass=[];;
 (function(System){
 	const private=Symbol("private");
 	const TestInterface = System.getClass(0);
-	var Test = null;
-	function Person(){
-		Object.call(this);
-		Object.prototype.hasOwnProperty.call(this,"name");
-		console.log(this instanceof Test);
-	}
+	function Person(){Object.call(this);}
 	const members = {};
 	members.target={m:2,d:1,get:function target(){
 		return this;
@@ -127,10 +141,7 @@ const delayClass=[];;
 	members.address={m:0,d:1,value:function address(){
 
 	}};
-	delayClass.push(function(){
-		Test = System.getClass(1);
-	});
-	System.setClass(2,Person,{
+	System.setClass(1,Person,{
 		id:1,
 		ns:1,
 		name:"test.Person",
@@ -144,7 +155,7 @@ const delayClass=[];;
 	function Persons(){
 		this.hasOwnProperty("name");
 	}
-	System.setClass(3,Persons,{
+	System.setClass(2,Persons,{
 		id:1,
 		ns:0,
 		name:"test.com.Persons",
@@ -154,7 +165,7 @@ const delayClass=[];;
 (function(System){
 	const private=Symbol("private");
 	const TestInterface = System.getClass(0);
-	const Person = System.getClass(2);
+	const Person = System.getClass(1);
 	function Test(name){
 		Object.defineProperty(this,private,{value:{"name123":"dfdsfsd"}});
 		name = name === void 0 ? "div" : name;
@@ -217,10 +228,11 @@ const delayClass=[];;
 		for(var ii = 0;ii < 10;++ii){
 			console.log(i);
 		}
-		for(var names in this){
+		for(var names in Test){
 		}
 		var bccc = [];
-		for(var value of bccc){
+		for(var value,a=System.getIterator(bccc);(value=a.next()) && !value.done && (value=a.value);){
+			console.log(value);
 		}
 		var b = 1;
 		this.method < b;
@@ -422,6 +434,7 @@ const delayClass=[];;
 		}
 		const person = new Person();
 		const bbb = name(person);
+		name(person);
 		const dd = this.map();
 		var ccc = dd.name999('1','999');
 		var cccww = dd.name999(999,666);
@@ -443,7 +456,7 @@ const delayClass=[];;
 		dd.push(1);
 		return dd;
 	}};
-	System.setClass(1,Test,{
+	System.setClass(3,Test,{
 		id:1,
 		ns:1,
 		name:"test.Test",
@@ -453,4 +466,3 @@ const delayClass=[];;
 		members:members
 	});
 })(System);
-(function(queues,load){while(load=queues.pop())load();})(delayClass);

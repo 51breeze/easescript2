@@ -26,7 +26,7 @@ package test
 
         private static var iiu:Class = Test;
 
-        constructor<T>( name:string="div" ):Test
+        constructor( name:string="div" ):Test
         {
 
             super(name);
@@ -174,7 +174,7 @@ package test
                 console.log( i );
              }
 
-             for( var names in this ){
+             for( var names in Test  ){
 
              }
 
@@ -182,9 +182,8 @@ package test
              //bccc= this.data;
 
              for( var value of bccc){
-
+                console.log( value )
              }
-
 
              var b=1;
 
@@ -457,7 +456,7 @@ package test
               
             
 
-            function name<T extends Person,B>( i:T ):T{
+            function name<T extends TestInterface,B>( i:T ):T{
 
                 var b:T = i;
                 i.avg();
@@ -472,10 +471,10 @@ package test
 
 
            // name<TestInterface,test.Person>( person ); 
-            const bbb = name<TestInterface,string>( person ); 
+            const bbb:TestInterface = name<TestInterface,string>( person ); 
 
 
-           // name( "1" ); 
+            name<test.Person,string>( person ); 
 
 
             //type T = {

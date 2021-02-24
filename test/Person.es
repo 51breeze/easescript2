@@ -5,11 +5,11 @@ package test
     public class Person extends Object implements TestInterface
     {
 
-        constructor(){
+        /*constructor(){
            super();
            super.hasOwnProperty("name");
            console.log( this is Test )
-        }
+        }*/
 
         get target(){
             return this;
