@@ -5,7 +5,7 @@ package test
     import test.Person;
     import test.com.Persons;
 
-    public class Test<U> extends Person
+    public class Test<U> extends Person implements Iterator
     {
 
         public var name123:string="dfdsfsd";
@@ -26,6 +26,20 @@ package test
 
         private static var iiu:Class = Test;
 
+
+        public next():{value:any,done:boolean,uu:string}{
+
+            var d = {value:1,done:false,uu:''};
+            return d;
+        }
+
+        public getNamess(){
+            var i:any = 5;
+
+            return i;
+
+        }
+        
         constructor( name:string="div" ):Test
         {
 
@@ -34,6 +48,7 @@ package test
             console.log( this is Person);
             console.log( this instanceof TestInterface);
             console.log( this is TestInterface);
+
             
             let ir=0,br=9;
             if(ir=5,br=6){

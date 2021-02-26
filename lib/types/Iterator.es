@@ -1,7 +1,5 @@
-package
-{   
-    declarator Iterator 
-    {
-       public next():object;
+package{   
+    declarator Iterator{
+       public next():{value:any,done:boolean};
     }
 }

@@ -289,6 +289,14 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 	},set:function setName123(value){
 		this[private].name123=value;
 	}};
+	members.next={m:2,d:1,value:function next(){
+		var d = {"value":1,"done":false,"uu":''};
+		return d;
+	}};
+	members.getNamess={m:2,d:1,value:function getNamess(){
+		var i = 5;
+		return i;
+	}};
 	members.iuuu={m:2,d:1,get:function iuuu(){
 		var ii = this.name123;
 		if(6){
