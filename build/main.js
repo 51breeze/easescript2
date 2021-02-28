@@ -104,7 +104,8 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};;
+};
+const delayClass=[];;
 (function(System){
 	function TestInterface(){}
 	System.setClass(0,TestInterface,{
@@ -116,7 +117,12 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 (function(System){
 	const private=Symbol("private");
 	const TestInterface = System.getClass(0);
-	function Person(){Object.call(this);}
+	var Test = null;
+	function Person(){
+		Object.call(this);
+		Object.prototype.hasOwnProperty.call(this,"name");
+		console.log(this instanceof Test);
+	}
 	const members = {};
 	members.target={m:2,d:1,get:function target(){
 		return this;
@@ -141,7 +147,10 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 	members.address={m:0,d:1,value:function address(){
 
 	}};
-	System.setClass(1,Person,{
+	delayClass.push(function(){
+		Test = System.getClass(1);
+	});
+	System.setClass(2,Person,{
 		id:1,
 		ns:1,
 		name:"test.Person",
@@ -155,7 +164,7 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 	function Persons(){
 		this.hasOwnProperty("name");
 	}
-	System.setClass(2,Persons,{
+	System.setClass(3,Persons,{
 		id:1,
 		ns:0,
 		name:"test.com.Persons",
@@ -165,10 +174,11 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 (function(System){
 	const private=Symbol("private");
 	const TestInterface = System.getClass(0);
-	const Person = System.getClass(1);
-	function Test(name){
+	const Person = System.getClass(2);
+	function Test(name,value123){
 		Object.defineProperty(this,private,{value:{"name123":"dfdsfsd"}});
 		name = name === void 0 ? "div" : name;
+		value123 = value123 === void 0 ? null : value123;
 		var $this1 = this;
 		Person.call(this,name);
 		console.log(this instanceof Person);
@@ -275,7 +285,8 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 	}
 	const methods = {};
 	methods.age={m:2,d:0,value:50};
-	methods.fc={m:2,d:1,value:function fc(){
+	methods.fc={m:2,d:1,value:function fc(iiii){
+		iiii = iiii === void 0 ? null : iiii;
 		var dd = Test;
 		return dd;
 	}};
@@ -290,7 +301,7 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 		this[private].name123=value;
 	}};
 	members.next={m:2,d:1,value:function next(){
-		var d = {"value":1,"done":false,"uu":''};
+		var d = {"value":1,"done":false};
 		return d;
 	}};
 	members.getNamess={m:2,d:1,value:function getNamess(){
@@ -444,9 +455,7 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 		const bbb = name(person);
 		name(person);
 		const dd = this.map();
-		var ccc = dd.name999('1','999');
-		var cccww = dd.name999(999,666);
-		ccc.substr(0);
+		var ccc = dd.name999({"names":""},'');
 	}};
 	members.map={m:2,d:1,value:function map(){
 		const dd = {"name999":function(c,b){
@@ -464,7 +473,7 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 		dd.push(1);
 		return dd;
 	}};
-	System.setClass(3,Test,{
+	System.setClass(1,Test,{
 		id:1,
 		ns:1,
 		name:"test.Test",
@@ -474,3 +483,4 @@ System.awaiter = function (thisArg, _arguments, P, generator) {
 		members:members
 	});
 })(System);
+(function(queues,load){while(load=queues.pop())load();})(delayClass);

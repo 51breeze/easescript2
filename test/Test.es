@@ -12,8 +12,9 @@ package test
 
         public static const age:int=50
 
-        static fc():Class
+        static fc(iiii=null):Class
         {
+
             var dd:Class = Test;
             return dd;
         }
@@ -27,9 +28,9 @@ package test
         private static var iiu:Class = Test;
 
 
-        public next():{value:any,done:boolean,uu:string}{
+        public next():{value:any,done:boolean}{
 
-            var d = {value:1,done:false,uu:''};
+            var d = {value:1,done:false};
             return d;
         }
 
@@ -40,7 +41,7 @@ package test
 
         }
         
-        constructor( name:string="div" ):Test
+        constructor( name:string="div",value123:U=null):Test
         {
 
             super(name);
@@ -471,7 +472,7 @@ package test
               
             
 
-            function name<T extends TestInterface,B>( i:T ):T{
+            function name<T extends TestInterface>( i:T ):T{
 
                 var b:T = i;
                 i.avg();
@@ -486,10 +487,10 @@ package test
 
 
            // name<TestInterface,test.Person>( person ); 
-            const bbb:TestInterface = name<TestInterface,string>( person ); 
+            const bbb:TestInterface = name( person ); 
 
 
-            name<test.Person,string>( person ); 
+            name<test.Person>( person ); 
 
 
             //type T = {
@@ -500,10 +501,10 @@ package test
              const dd = this.map();
         
 
-             var ccc:string = dd.name999<string,string>('1', '999');
-             var cccww:int = dd.name999<int,int>(999,666);
+             var ccc = dd.name999<object,string>({names:""},'');
+          //   var cccww:int = dd.name999<int,int>(999,666);
 
-             ccc.substr(0);
+             //ccc.substr(0);
 
 
             
@@ -511,7 +512,7 @@ package test
 
         map(){
             const dd:object={
-                name999<T,B>(c, b:T ):T{
+                name999<T extends {name:string},B>(c:T, b:B ):T{
                    return b;
                 }
             }
@@ -529,8 +530,6 @@ package test
 
             const dd:int[] = [];
            const bb = {global:1,private:1};
-
-
             dd.push( 1 );
 
 
