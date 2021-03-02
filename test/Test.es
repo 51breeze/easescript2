@@ -501,7 +501,7 @@ package test
              const dd = this.map();
         
 
-             var ccc = dd.name999<object,string>({names:""},'');
+             var ccc = dd.name999<{name:int},string>({name:""},'');
           //   var cccww:int = dd.name999<int,int>(999,666);
 
              //ccc.substr(0);
@@ -512,16 +512,12 @@ package test
 
         map(){
             const dd:object={
-                name999<T extends {name:string},B>(c:T, b:B ):T{
+                name999<T extends {name:int},B>(c:T, b:B ):B{
+                   console.log( c.name );
                    return b;
                 }
             }
-
-            if( 1 ){
-                return {};
-            }
             this.address();
-
             return dd;
         }
 
@@ -529,7 +525,7 @@ package test
 
 
             const dd:int[] = [];
-           const bb = {global:1,private:1};
+            const bb = {global:1,private:1};
             dd.push( 1 );
 
 

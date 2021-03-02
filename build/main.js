@@ -455,15 +455,13 @@ const delayClass=[];;
 		const bbb = name(person);
 		name(person);
 		const dd = this.map();
-		var ccc = dd.name999({"names":""},'');
+		var ccc = dd.name999({"name":""},'');
 	}};
 	members.map={m:2,d:1,value:function map(){
 		const dd = {"name999":function(c,b){
+			console.log(c.name);
 			return b;
 		}};
-		if(1){
-			return {};
-		}
 		this.address();
 		return dd;
 	}};
