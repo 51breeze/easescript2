@@ -419,11 +419,11 @@ package test
             var cc:[number] = [1];
 
 
-            var x:[number,int,string,...object] = [1,1,'2222',{}];
+            var x:[number,int,string] = [1,1,'2222'];
 
             b.push( '1' )
 
-             b.push( ["===",666] )
+             b.push( ["===",1] )
 
 
 
@@ -501,10 +501,11 @@ package test
              const dd = this.map();
         
 
-             var ccc = dd.name999<{name:int},string>({name:""},'');
+             var ccc = dd.name999<{name:string},string>({name:"1"},"123");
           //   var cccww:int = dd.name999<int,int>(999,666);
 
-             //ccc.substr(0);
+             ccc.name.substr(0);
+           
 
 
             
@@ -512,9 +513,9 @@ package test
 
         map(){
             const dd:object={
-                name999<T extends {name:int},B>(c:T, b:B ):B{
+                name999<T extends {name:string},B>(c:T, b:B ){
                    console.log( c.name );
-                   return b;
+                   return c;
                 }
             }
             this.address();

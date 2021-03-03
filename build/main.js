@@ -429,9 +429,9 @@ const delayClass=[];;
 		var str = ["a","1"];
 		var b = ["",["1",1],"true"];
 		var cc = [1];
-		var x = [1,1,'2222',{}];
+		var x = [1,1,'2222'];
 		b.push('1');
-		b.push(["===",666]);
+		b.push(["===",1]);
 		return "sssss";
 	}};
 	members.name={m:2,d:1,get:function name(){
@@ -455,12 +455,13 @@ const delayClass=[];;
 		const bbb = name(person);
 		name(person);
 		const dd = this.map();
-		var ccc = dd.name999({"name":""},'');
+		var ccc = dd.name999({"name":"1"},"123");
+		ccc.name.substr(0);
 	}};
 	members.map={m:2,d:1,value:function map(){
 		const dd = {"name999":function(c,b){
 			console.log(c.name);
-			return b;
+			return c;
 		}};
 		this.address();
 		return dd;
