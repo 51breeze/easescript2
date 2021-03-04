@@ -236,12 +236,18 @@ package test
 
             ddss999 = 'ssss';
 
-           // var {ttts:string} = this.data;
+            var {ttts:string} = this.data;
+
+            var fuuu = ()=>{
+                return [];
+            }
+
+             var {tttss:string,yuuuu} = fuuu();
+
+            var [name6,name7,name8] = fuuu();
 
 
             const ddc=(i:int,b:string="123"):int=>{
-
-               
                 
                 return 5;
 
@@ -317,7 +323,7 @@ package test
         }
 
 
-        [Runtime(server)]
+        /*[Runtime(server)]
         get data(){
             var b:any = [];
 
@@ -329,7 +335,7 @@ package test
 
             //b={}
             return b;
-        }
+        }*/
 
 
 

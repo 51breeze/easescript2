@@ -255,6 +255,15 @@ const delayClass=[];;
 		var ddss=dd || "456";
 		var ddss999=arr[0] || "456",ioo=arr[1];
 		ddss999='ssss';
+		const _b = this.data;
+		var ttts=_b["ttts"];
+		var fuuu = function(){
+			return [];
+		};
+		const _b1 = fuuu();
+		var tttss=_b1["tttss"],yuuuu=_b1["yuuuu"];
+		const _c = fuuu();
+		var name6=_c[0],name7=_c[1],name8=_c[2];
 		const ddc = function(i,b){
 			b = b === void 0 ? "123" : b;
 			return 5;
@@ -274,7 +283,9 @@ const delayClass=[];;
 		var ds = 2 || 3;
 		Number.isNaN(1);
 		Number(1).valueOf();
+		console.log(this.data);
 		this.ss(1,5,"6");
+		this.data;
 		var bname = "data123";
 		if(1){
 			bname="data1236666";
@@ -314,14 +325,21 @@ const delayClass=[];;
 		ii=true;
 		return ii;
 	}};
-
+	members.data={m:2,d:1,get:function data(){
+		var b = [];
+		if(4){
+			b=this.avg;
+		}
+		b=this.iuuu;
+		return b;
+	}};
 	members.ss={m:0,d:1,value:function ss(){
 		var types = Array.prototype.slice.call(arguments,0);
 		return System.awaiter(this, void 0, void 0, function (){
 			var dd;
 			var data;
-			return System.generator(this, function ($a) {
-				switch ($a.label){
+			return System.generator(this, function (_a) {
+				switch (_a.label){
 					case 0 :
 						dd = function(i,b){
 							b = b === void 0 ? "123" : b;
@@ -343,14 +361,14 @@ const delayClass=[];;
 						if(!2)return [3,4];
 						return [4,dd(222222222)];
 					case 1:
-						$a.sent();
+						_a.sent();
 						console.log(2222222222);
 						if(!88888)return [3,3];
 						return [4,dd(222222222)];
 					case 2:
-						$a.sent();
+						_a.sent();
 						console.log(2222222222);
-						$a.label=3;
+						_a.label=3;
 					case 3:
 						return [3,7];
 					case 4:
@@ -358,12 +376,12 @@ const delayClass=[];;
 						if(!2222)return [3,6];
 						return [4,dd(222222222333333333333333)];
 					case 5:
-						$a.sent();
+						_a.sent();
 						console.log(2222222222333333333333333);
-						$a.label=6;
+						_a.label=6;
 					case 6:
 						console.log("=====222222222222222222222==99999======");
-						$a.label=7;
+						_a.label=7;
 					case 7:
 						console.log("=====999999999999999====99999999999999999====");
 						if(22){
@@ -377,7 +395,7 @@ const delayClass=[];;
 					case 8:
 						return [4,dd(77777777777777777777777777)];
 					case 9:
-						$a.sent();
+						_a.sent();
 						return [3, 11];
 
 					case 10:
@@ -402,12 +420,12 @@ const delayClass=[];;
 						console.log("==3333333333==");
 						return [4,dd(3333333333)];
 					case 13:
-						$a.sent();
+						_a.sent();
 						return [4,dd(3333333333)];
 					case 14:
-						$a.sent();
+						_a.sent();
 						console.log(3333333333);
-						$a.label=15;
+						_a.label=15;
 					case 15:
 						data = {"name":123,"ccc":666};
 						return [2, data];
