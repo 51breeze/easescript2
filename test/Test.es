@@ -316,6 +316,23 @@ package test
             return b;
         }
 
+
+        [Runtime(server)]
+        get data(){
+            var b:any = [];
+
+            if( 4 ){
+                b = this.avg;
+            }
+
+            b = this.iuuu;
+
+            //b={}
+            return b;
+        }
+
+
+
         [Runtime(client)]
         [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
 

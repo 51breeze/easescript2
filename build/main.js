@@ -274,9 +274,7 @@ const delayClass=[];;
 		var ds = 2 || 3;
 		Number.isNaN(1);
 		Number(1).valueOf();
-		console.log(this.data);
 		this.ss(1,5,"6");
-		this.data;
 		var bname = "data123";
 		if(1){
 			bname="data1236666";
@@ -316,14 +314,7 @@ const delayClass=[];;
 		ii=true;
 		return ii;
 	}};
-	members.data={m:2,d:1,get:function data(){
-		var b = [];
-		if(4){
-			b=this.avg;
-		}
-		b=this.iuuu;
-		return b;
-	}};
+
 	members.ss={m:0,d:1,value:function ss(){
 		var types = Array.prototype.slice.call(arguments,0);
 		return System.awaiter(this, void 0, void 0, function (){
