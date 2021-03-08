@@ -22,7 +22,11 @@ package
        public lastIndexOf(value):any;
        public map(callback:Function,thisArg=null):Array;
        public pop():any;
-       public push( value ):uint;
+       /**
+        * Appends new elements to the end of an array, and returns the new length of the array.
+        * @param items New elements to add to the array.
+        */
+       public push( items ):uint;
        public reduce(callback:Function,initialValue=null):any;
        public reduceRight(callback:Function,initialValue=null):any;
        public reverse():Array;

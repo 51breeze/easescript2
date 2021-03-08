@@ -1,3 +1,7 @@
+/**
+* Test a test package
+*/
+
 package test
 {
 
@@ -5,12 +9,18 @@ package test
     import test.Person;
     import test.com.Persons;
 
+    /**
+    * Test a class
+    */
     public class Test<U> extends Person implements Iterator
     {
 
         public var name123:string="dfdsfsd";
 
-        public static const age:int=50
+        /**
+        *   age propery
+        */
+        public static const age:int=50;
 
         static fc(iiii=null):Class
         {
