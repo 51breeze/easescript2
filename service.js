@@ -22,9 +22,9 @@ class Service{
     }
     start(action, file, startAt, token){
         const module = this.getModule(file);
-        const stack = module.stackNodeMap.get(startAt);
+        const stack = module.getStackByAt(startAt);
         if( stack ){
-            return stack.value();
+            return stack.definition();
         }
         return null;
     }
