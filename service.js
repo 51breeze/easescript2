@@ -23,8 +23,14 @@ class Service{
     start(action, file, startAt, token){
         const module = this.getModule(file);
         const stack = module.getStackByAt(startAt);
+        console.log("=====match======", !!stack )
         if( stack ){
-            return stack.definition();
+            console.log("type====", stack.node.type, stack.parentStack.node.type )
+            const result = stack.definition();
+
+            console.log("====result====",  !!result )
+
+            return result;
         }
         return null;
     }

@@ -215,7 +215,11 @@ package test
 
              this.method < b ;
 
+             this.method();
+
              var arr=[];
+
+             arr.push(1);
 
              var [bb:int,cc:int] = [1,2];
 

@@ -247,6 +247,7 @@ const delayClass=[];;
 		var b = 1;
 		this.method < b;
 		var arr = [];
+		arr.push(1);
 		var bb=1,cc=2;
 		var dsss = [].concat(arr);
 		var bbc = {"bb":"uuu","ii":666,"Red":1,"Green":4};
