@@ -189,7 +189,10 @@ const delayClass=[];;
 		if(ir=5,br=6){
 			ir=6;
 		}
-		new Array();
+		new Array(ir);
+		var niiiio = {"nn":function(){
+			return 8;
+		}};
 		var uiii = 4 ^ 6,btts = 9 | 2;
 		var hhhh = 9;
 		this.method("",1).substr();
@@ -246,6 +249,7 @@ const delayClass=[];;
 		}
 		var b = 1;
 		this.method < b;
+		this.method('',50);
 		var arr = [];
 		arr.push(1);
 		var bb=1,cc=2;
@@ -259,6 +263,9 @@ const delayClass=[];;
 		const _b = this.data;
 		var ttts=_b["ttts"];
 		var fuuu = function(){
+			if(1){
+				return [];
+			}
 			return [];
 		};
 		const _b1 = fuuu();

@@ -68,7 +68,16 @@ package test
 
             }
 
-            new Array();
+            new Array(ir);
+
+
+            var niiiio={
+                nn(){
+                    return 8;
+                }
+            }
+
+            
 
 
 
@@ -215,7 +224,7 @@ package test
 
              this.method < b ;
 
-             this.method();
+             this.method  ('',50);
 
              var arr=[];
 
@@ -252,7 +261,10 @@ package test
 
             var {ttts:string} = this.data;
 
-            var fuuu = ()=>{
+            var fuuu = ():any=>{
+                if( 1 ){
+                    return [];
+                }
                 return [];
             }
 
@@ -339,7 +351,7 @@ package test
 
 
         [Runtime(client)]
-        [Router(value ="/ss", method=post, param=4555,type=com.test.Test )]
+        [Router(value ="/ss", method=post, param=4555,type=test.Test )]
 
          private async ss( ...types:[int,number, ...string ] ){
 

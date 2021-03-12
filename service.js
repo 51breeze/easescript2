@@ -20,17 +20,32 @@ class Service{
         }
         return module;
     }
+    comments(result){
+        if( result && result.comments ){
+            result.comments.forEach( item=>{
+                if( item.type=="Block" ){
+                    item.value = item.value.split(/\r\n/g).map( val=>val.replace(/^(\s+|\t+)?\*?/g,"") ).filter( val=>!!val).join("\r\n");
+                }else{
+                    item.value = item.value.split(/^(\s+|\t+)?([\/]+)/g);
+                }
+            });
+        }
+        return result;
+    }
+
+    position(result){
+
+    }
+
     start(action, file, startAt, token){
         const module = this.getModule(file);
         const stack = module.getStackByAt(startAt);
-        console.log("=====match======", !!stack )
         if( stack ){
-            console.log("type====", stack.node.type, stack.parentStack.node.type )
             const result = stack.definition();
-
-            console.log("====result====",  !!result )
-
-            return result;
+            if( action==="definition"  ){
+                if( !result.location )return null;
+            }
+            return this.comments(result);
         }
         return null;
     }
