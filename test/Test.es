@@ -60,6 +60,7 @@ package test
             console.log( this instanceof TestInterface);
             console.log( this is TestInterface);
 
+         
             
             let ir=0,br=9;
             if(ir=5,br=6){
@@ -254,7 +255,7 @@ package test
 
             
 
-            var {ddss:string="456"} = {"ddss":dd};
+            var {ddss:string="456"} = {"ddss":dd,dd:6666};
             var [ddss999:string="456",ioo:int]= arr;
 
             ddss999 = 'ssss';

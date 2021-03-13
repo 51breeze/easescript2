@@ -26,7 +26,8 @@ class Service{
                 if( item.type=="Block" ){
                     item.value = item.value.split(/\r\n/g).map( val=>val.replace(/^(\s+|\t+)?\*?/g,"") ).filter( val=>!!val).join("\r\n");
                 }else{
-                    item.value = item.value.split(/^(\s+|\t+)?([\/]+)/g);
+                    console.log( item )
+                    //item.value = item.value.split(/^(\s+|\t+)?([\/]+)/g);
                 }
             });
         }
@@ -37,17 +38,27 @@ class Service{
 
     }
 
-    start(action, file, startAt, token){
-        const module = this.getModule(file);
-        const stack = module.getStackByAt(startAt);
-        if( stack ){
-            const result = stack.definition();
-            if( action==="definition"  ){
-                if( !result.location )return null;
+    start(action, file, startAt, line, character, word){
+        try{
+            const module = this.getModule(file);
+            const stack = action==="completion" ? module.getStackByAt(startAt, startAt, -1) : module.getStackByAt(startAt);
+            if( stack ){
+                console.log(action,  "====node type===", stack.node.type, startAt, stack.parentStack.node.type )
+                const result = stack.definition();
+                if( result && action==="definition" && !result.location  ){
+                    return null;
+                }
+                if( result && action==="hover" ){
+                    this.comments(result);
+                }
+                return result;
+            }else{
+                console.log(action,  "====not found===", startAt)
             }
-            return this.comments(result);
+            return null;
+        }catch(e){
+            console.log(e);
         }
-        return null;
     }
 }
 
